@@ -3,7 +3,6 @@ module mini-douyin
 go 1.19
 
 require (
-	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/zeromicro/go-zero v1.4.4
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 	google.golang.org/grpc v1.50.1
