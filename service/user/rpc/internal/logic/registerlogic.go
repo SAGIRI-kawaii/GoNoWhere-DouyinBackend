@@ -49,6 +49,16 @@ func (l *RegisterLogic) Register(in *user.DouyinUserRegisterRequest) (*user.Douy
 		if err != nil {
 			return nil, status.Error(100, "error")
 		}
+		_, err = l.svcCtx.UserModel.Insert(l.ctx, &model.Users{
+			Id:            newUser.Id,
+			Name:          newUser.Name,
+			UserId:        newUser.Id,
+			FollowCount:   0,
+			FollowerCount: 0,
+		})
+		if err != nil {
+			return nil, status.Error(100, "注册失败")
+		}
 		return &user.DouyinUserRegisterResponse{
 			UserId: newUser.Id,
 		}, nil

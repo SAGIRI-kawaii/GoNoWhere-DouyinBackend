@@ -36,7 +36,7 @@ func (l *UserInfoLogic) UserInfo(in *user.DouyinUserRequest) (*user.DouyinUserRe
 		return nil, status.Error(100, "查询用户失败")
 	}
 
-	res1, err := l.svcCtx.LoginModel.FindOne(l.ctx, in.UserId)
+	res1, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, in.UserId)
 	if err != nil {
 		if err == model.ErrNotFound {
 			return nil, status.Error(100, "用户不存在")
@@ -45,8 +45,10 @@ func (l *UserInfoLogic) UserInfo(in *user.DouyinUserRequest) (*user.DouyinUserRe
 	}
 	return &user.DouyinUserResponse{
 		User: &user.DouyinUser{
-			Id:   res.Id,
-			Name: res1.Name,
+			Id:            res.Id,
+			Name:          res.Name,
+			FollowCount:   &res1.FollowerCount,
+			FollowerCount: &res1.FollowerCount,
 		},
 	}, nil
 }
