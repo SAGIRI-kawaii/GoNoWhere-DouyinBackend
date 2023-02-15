@@ -2,3 +2,4 @@
 *.tmp
 *.wal
 default.etcd/member/snap/db
+*.wal
