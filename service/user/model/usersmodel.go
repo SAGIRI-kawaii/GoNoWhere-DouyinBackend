@@ -22,6 +22,6 @@ type (
 // NewUsersModel returns a model for the database table.
 func NewUsersModel(conn sqlx.SqlConn, c cache.CacheConf) UsersModel {
 	return &customUsersModel{
-		defaultUsersModel: newUsersModel(conn),
+		defaultUsersModel: newUsersModel(conn, c),
 	}
 }

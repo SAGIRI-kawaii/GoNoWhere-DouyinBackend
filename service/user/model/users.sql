@@ -5,13 +5,14 @@ create table users
         primary key,
     create_at      timestamp default CURRENT_TIMESTAMP not null,
     deleted_at     timestamp                           null,
-    user_id        bigint                              not null,
+    name           varchar(34)                         not null,
     follow_count   bigint    default 0                 not null,
     follower_count bigint    default 0                 not null,
-    constraint idx_user_id
-        unique (user_id),
-    constraint user_id
+    user_id        bigint                              not null,
+constraint idx_user_id
         unique (user_id),
         primary key (id)
+
 );
+
 
