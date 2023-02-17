@@ -47,7 +47,11 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 			return nil, status.Error(100, "关注失败")
 		}
 		// todo: 改变User里面的关注数
-		err = l.svcCtx.UserModel.Update()
+		err = l.svcCtx.UserModel.AddFollowByUserId(l.ctx, int64(userid))
+		err = l.svcCtx.UserModel.AddFollowerByUserId(l.ctx, in.ToUserId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
 		return &follow.DouyinRelationActionResponse{}, nil
 
 	} else {
@@ -62,6 +66,11 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 			return nil, status.Error(100, "删除失败")
 		}
 		//todo : 改变User里面的关注数
+		err = l.svcCtx.UserModel.ReduceFollowByUserId(l.ctx, int64(userid))
+		err = l.svcCtx.UserModel.ReduceFollowerByUserId(l.ctx, in.ToUserId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
 		return &follow.DouyinRelationActionResponse{}, nil
 
 	}
