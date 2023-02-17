@@ -33,7 +33,7 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 	if in.ActionType == 1 {
 		// 在follow表中插入一条记录
 		token, err := strconv.ParseInt(in.Token, 10, 64)
-		userid, err := jwtx.ParseToken2Uid(l.svcCtx.Config.Auth.AccessSecret, uint64(token))
+		userid, err := jwtx.ParseToken2Uid("a", uint64(token))
 		if err != nil {
 			return nil, err
 		}
@@ -47,12 +47,13 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 			return nil, status.Error(100, "关注失败")
 		}
 		// todo: 改变User里面的关注数
+		err = l.svcCtx.UserModel.Update()
 		return &follow.DouyinRelationActionResponse{}, nil
 
 	} else {
 		//在follow表中删除一个记录
 		token, err := strconv.ParseInt(in.Token, 10, 64)
-		userid, err := jwtx.ParseToken2Uid(l.svcCtx.Config.Auth.AccessSecret, uint64(token))
+		userid, err := jwtx.ParseToken2Uid("a", uint64(token))
 		if err != nil {
 			return nil, err
 		}
