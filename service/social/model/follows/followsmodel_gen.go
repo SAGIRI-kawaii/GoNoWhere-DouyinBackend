@@ -6,6 +6,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
@@ -28,7 +29,8 @@ type (
 	followsModel interface {
 		Insert(ctx context.Context, data *Follows) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Follows, error)
-		FindAllByuid(ctx context.Context, uid int64) ([]*Follows, error) // 查询关注列表
+		FindAllByUserId(ctx context.Context, uid int64) ([]*Follows, error)     // 查询关注列表
+		FindAllByToUserId(ctx context.Context, touid int64) ([]*Follows, error) // 查询被关注列表
 		Update(ctx context.Context, data *Follows) error
 		Delete(ctx context.Context, id int64) error
 		DeleteByuid(ctx context.Context, uid int64, touid int64) error // 取消关注
@@ -86,10 +88,23 @@ func (m *defaultFollowsModel) FindOne(ctx context.Context, id int64) (*Follows, 
 		return nil, err
 	}
 }
-func (m *defaultFollowsModel) FindAllByuid(ctx context.Context, uid int64) ([]*Follows, error) {
+func (m *defaultFollowsModel) FindAllByUserId(ctx context.Context, uid int64) ([]*Follows, error) {
 	var resp []*Follows
 	query := fmt.Sprintf("select %s from %s where `user_id` = ? ", followsRows, m.table)
-	err := m.QueryRowNoCache(&resp, query, uid)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uid)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+func (m *defaultFollowsModel) FindAllByToUserId(ctx context.Context, touid int64) ([]*Follows, error) {
+	var resp []*Follows
+	query := fmt.Sprintf("select %s from %s where `to_user_id` = ? ", followsRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, touid)
 	switch err {
 	case nil:
 		return resp, nil
