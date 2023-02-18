@@ -1,0 +1,21 @@
+Name: Videos
+Host: 0.0.0.0
+Port: 8888
+
+Mysql:
+  DataSource: where:where@tcp(8.142.30.177:3306)/gonowhere?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+
+Auth:
+  AccessSecret: uOvKLmVfztaXGpNYd4Z0I1SiT7MweJhl
+  AccessExpire: 86400
+
+VideoRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: video.rpc
