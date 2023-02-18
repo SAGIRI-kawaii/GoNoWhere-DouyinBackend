@@ -1,0 +1,21 @@
+Name: Interact
+Host: 0.0.0.0
+Port: 8002
+
+Mysql:
+  DataSource: where:where@tcp(8.142.30.177:3306)/gonowhere?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+CacheRedis:
+  - Host: 8.142.30.177:6379
+    Pass: ws1234++--
+    Type: node
+
+Auth:
+  AccessSecret: uOvKLmVfztaXGpNYd4Z0I1SiT7MweJhl
+  AccessExpire: 86400
+
+InteractRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379  
+    Key: interact.rpc
