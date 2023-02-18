@@ -4,8 +4,6 @@ import (
 	"context"
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/jwtx"
-	"strconv"
-
 	"mini-douyin/service/social/model/follows"
 	"mini-douyin/service/social/rpc/follow"
 	"mini-douyin/service/social/rpc/internal/svc"
@@ -32,8 +30,7 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 	//根据ActionType判断操作类型
 	if in.ActionType == 1 {
 		// 在follow表中插入一条记录
-		token, err := strconv.ParseInt(in.Token, 10, 64)
-		userid, err := jwtx.ParseToken2Uid("a", uint64(token))
+		userid, err := jwtx.ParseToken2Uid("a", in.Token)
 		if err != nil {
 			return nil, err
 		}
@@ -56,8 +53,7 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 
 	} else {
 		//在follow表中删除一个记录
-		token, err := strconv.ParseInt(in.Token, 10, 64)
-		userid, err := jwtx.ParseToken2Uid("a", uint64(token))
+		userid, err := jwtx.ParseToken2Uid("a", in.Token)
 		if err != nil {
 			return nil, err
 		}
