@@ -6,7 +6,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	//"mini-douyin/common/dal"
 	"strings"
 	"time"
 
@@ -32,9 +31,9 @@ type (
 		Insert(ctx context.Context, data *Videos) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Videos, error)
 		FindOneByVideoId(ctx context.Context, videoId int64) (*Videos, error)
-		FindVideosByFeed(ctx context.Context, uid int64, limit int, latestTime *int64) ([]*Videos, error)
 		Update(ctx context.Context, data *Videos) error
 		Delete(ctx context.Context, id int64) error
+		GetFeedVideos(ctx context.Context, limit int, latestTime *int64) ([]*Videos, error)
 	}
 
 	defaultVideosModel struct {
@@ -63,7 +62,14 @@ func newVideosModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultVideosModel {
 		table:      "`videos`",
 	}
 }
+func (m *defaultVideosModel) GetFeedVideos(ctx context.Context, limit int, latestTime *int64) ([]*Videos, error) {
+	var resp []*Videos
+	if latestTime == nil || *latestTime == 0 {
+		cur_time := int64(time.Now().UnixMilli())
+		latestTime = &cur_time
+	}
 
+}
 func (m *defaultVideosModel) Delete(ctx context.Context, id int64) error {
 	data, err := m.FindOne(ctx, id)
 	if err != nil {
@@ -78,6 +84,7 @@ func (m *defaultVideosModel) Delete(ctx context.Context, id int64) error {
 	}, videosIdKey, videosVideoIdKey)
 	return err
 }
+
 func (m *defaultVideosModel) FindOne(ctx context.Context, id int64) (*Videos, error) {
 	videosIdKey := fmt.Sprintf("%s%v", cacheVideosIdPrefix, id)
 	var resp Videos
@@ -114,23 +121,7 @@ func (m *defaultVideosModel) FindOneByVideoId(ctx context.Context, videoId int64
 		return nil, err
 	}
 }
-func (m *defaultVideosModel) FindVideosByFeed(ctx context.Context, uid int64, limit int, latestTime *int64) ([]*Videos, error) {
-	var resp []*Videos
-	if latestTime == nil || *latestTime == 0 {
-		cur_time := int64(time.Now().UnixMilli())
-		latestTime = &cur_time
-	}
-	query := fmt.Sprintf("select %s from %s where `update_time`  < %s order by update_time desc limit %s ", videosRows, m.table, *latestTime, limit)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uid)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
+
 func (m *defaultVideosModel) Insert(ctx context.Context, data *Videos) (sql.Result, error) {
 	videosIdKey := fmt.Sprintf("%s%v", cacheVideosIdPrefix, data.Id)
 	videosVideoIdKey := fmt.Sprintf("%s%v", cacheVideosVideoIdPrefix, data.VideoId)

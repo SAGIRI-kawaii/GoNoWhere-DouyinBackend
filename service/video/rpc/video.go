@@ -7,7 +7,7 @@ import (
 	"mini-douyin/service/video/rpc/internal/config"
 	"mini-douyin/service/video/rpc/internal/server"
 	"mini-douyin/service/video/rpc/internal/svc"
-	"mini-douyin/service/video/rpc/types/video"
+	"mini-douyin/service/video/rpc/video"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		video.RegisterVideoSrvServer(grpcServer, server.NewVideoSrvServer(ctx))
+		video.RegisterVideoServiceServer(grpcServer, server.NewVideoServiceServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
