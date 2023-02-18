@@ -29,8 +29,10 @@ func (l *UserInfoLogic) UserInfo(req *types.Douyin_user_request) (resp *types.Do
 	// todo: add your logic here and delete this line
 
 	token, err := strconv.ParseInt(req.Token, 10, 64)
-	res1, err := jwtx.ParseToken2Uid(l.svcCtx.Config.Auth.AccessSecret, uint64(token))
-
+	res1, err := jwtx.ParseToken2Uid(l.svcCtx.Config.Auth.AccessSecret, req.Token)
+	println(token)
+	println(string(token))
+	println(res1)
 	if err != nil {
 		return nil, err
 	}

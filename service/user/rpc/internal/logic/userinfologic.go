@@ -28,7 +28,7 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 func (l *UserInfoLogic) UserInfo(in *user.DouyinUserRequest) (*user.DouyinUserResponse, error) {
 	// todo: add your logic here and delete this line
 	//查询用户是否存在
-	res, err := l.svcCtx.LoginModel.FindOne(l.ctx, in.UserId)
+	res, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, in.UserId)
 	if err != nil {
 		if err == model.ErrNotFound {
 			return nil, status.Error(100, "用户不存在")
@@ -36,19 +36,19 @@ func (l *UserInfoLogic) UserInfo(in *user.DouyinUserRequest) (*user.DouyinUserRe
 		return nil, status.Error(100, "查询用户失败")
 	}
 
-	res1, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, in.UserId)
-	if err != nil {
-		if err == model.ErrNotFound {
-			return nil, status.Error(100, "用户不存在")
-		}
-		return nil, status.Error(100, "查询用户失败")
-	}
 	return &user.DouyinUserResponse{
 		User: &user.DouyinUser{
-			Id:            res.Id,
-			Name:          res.Name,
-			FollowCount:   &res1.FollowerCount,
-			FollowerCount: &res1.FollowerCount,
+			Id:              res.Id,
+			Name:            res.Name,
+			FollowCount:     &res.FollowerCount,
+			FollowerCount:   &res.FollowerCount,
+			IsFollow:        false,
+			Avatar:          &res.Avatar.String,
+			BackgroundImage: &res.BackgroundImage.String,
+			Signature:       &res.Signature.String,
+			TotalFavorited:  &res.TotalFavorited.Int64,
+			WorkCount:       &res.WorkCount.Int64,
+			FavoriteCount:   &res.FavoriteCount.Int64,
 		},
 	}, nil
 }

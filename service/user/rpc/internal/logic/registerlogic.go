@@ -2,12 +2,13 @@ package logic
 
 import (
 	"context"
+	"database/sql"
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/cryptx"
 	"mini-douyin/service/user/model"
-
 	"mini-douyin/service/user/rpc/internal/svc"
 	"mini-douyin/service/user/rpc/user"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -43,21 +44,29 @@ func (l *RegisterLogic) Register(in *user.DouyinUserRegisterRequest) (*user.Douy
 
 		res, err := l.svcCtx.LoginModel.Insert(l.ctx, &newUser)
 		if err != nil {
-			return nil, status.Error(100, "注册失败")
+			return nil, status.Error(100, "注册失败1")
 		}
 		newUser.Id, err = res.LastInsertId()
 		if err != nil {
 			return nil, status.Error(100, "error")
 		}
 		_, err = l.svcCtx.UserModel.Insert(l.ctx, &model.Users{
-			Id:            newUser.Id,
-			Name:          newUser.Name,
-			UserId:        newUser.Id,
-			FollowCount:   0,
-			FollowerCount: 0,
+			Id:              newUser.Id,
+			CreateAt:        time.Time{},
+			DeletedAt:       sql.NullTime{},
+			Name:            newUser.Name,
+			FollowCount:     0,
+			FollowerCount:   0,
+			UserId:          newUser.Id,
+			Avatar:          sql.NullString{String: "https://i.niupic.com/images/2023/02/17/akqc.jpg"},
+			BackgroundImage: sql.NullString{String: "https://i.niupic.com/images/2023/02/17/akqd.jpg"},
+			Signature:       sql.NullString{},
+			TotalFavorited:  sql.NullInt64{Int64: 0},
+			WorkCount:       sql.NullInt64{Int64: 0},
+			FavoriteCount:   sql.NullInt64{Int64: 0},
 		})
 		if err != nil {
-			return nil, status.Error(100, "注册失败")
+			return nil, status.Error(100, "注册失败2")
 		}
 		return &user.DouyinUserRegisterResponse{
 			UserId: newUser.Id,

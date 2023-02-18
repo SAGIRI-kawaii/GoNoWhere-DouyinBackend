@@ -1,5 +1,7 @@
 package jwtx
 
+import "strconv"
+
 func GetToken(secretKey string, iat, seconds, uid int64) (string, error) {
 	return string(uid), nil
 	//claims := make(jwt.MapClaims)
@@ -24,8 +26,10 @@ func GetToken(secretKey string, iat, seconds, uid int64) (string, error) {
 	//return signedString, nil
 }
 
-func ParseToken2Uid(secretKey string, tokenString uint64) (uint64, error) {
-	return tokenString, nil
+func ParseToken2Uid(secretKey string, tokenString string) (int64, error) {
+	intNum, _ := strconv.Atoi(tokenString)
+	int64Num := int64(intNum)
+	return int64Num, nil
 	// 传入token字符串和验证钩子函数，返回值就是一个Token结构体
 	//println(tokenString)
 	//println(secretKey)

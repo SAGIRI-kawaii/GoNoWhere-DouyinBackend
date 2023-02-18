@@ -44,7 +44,7 @@ func (l *RegisterLogic) Register(req *types.Douyin_user_register_request) (resp 
 	if err != nil {
 		return nil, err
 	}
-
+	println("token@:" + accessToken)
 	return &types.Douyin_user_register_response{
 		StatusCode: int(0),
 		StatusMsg:  "success",
