@@ -6,8 +6,11 @@ import (
 )
 
 type ServiceContext struct {
-	Config     config.Config
-	VideoModel videos.FavoritesModel
+	Config      config.Config
+	VideoModel  videos.VideosModel
+	FavorModel  videos.FavoritesModel
+	FollowModel videos.FollowsModel
+	UserModel   videos.UsersModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {

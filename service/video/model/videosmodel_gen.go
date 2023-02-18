@@ -62,11 +62,22 @@ func newVideosModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultVideosModel {
 		table:      "`videos`",
 	}
 }
+
 func (m *defaultVideosModel) GetFeedVideos(ctx context.Context, limit int, latestTime *int64) ([]*Videos, error) {
 	var resp []*Videos
 	if latestTime == nil || *latestTime == 0 {
 		cur_time := int64(time.Now().UnixMilli())
 		latestTime = &cur_time
+	}
+	query := fmt.Sprintf("select %s from %s where `update_time` <= ? order by `update_time` desc limit %s", videosRows, m.table, limit)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, *latestTime)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
 	}
 
 }

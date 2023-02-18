@@ -30,6 +30,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*Follows, error)
 		Update(ctx context.Context, data *Follows) error
 		Delete(ctx context.Context, id int64) error
+		JudgeFollow(ctx context.Context, followid int64, followee int64) (bool, error)
 	}
 
 	defaultFollowsModel struct {
@@ -62,7 +63,19 @@ func (m *defaultFollowsModel) Delete(ctx context.Context, id int64) error {
 	}, followsIdKey)
 	return err
 }
-
+func (m *defaultFollowsModel) JudgeFollow(ctx context.Context, followid int64, followeeid int64) (bool, error) {
+	var resp Follows
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `to_user_id` = ?", videosRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, followid, followeeid)
+	switch err {
+	case nil:
+		return true, nil
+	case sqlc.ErrNotFound:
+		return false, ErrNotFound
+	default:
+		return false, err
+	}
+}
 func (m *defaultFollowsModel) FindOne(ctx context.Context, id int64) (*Follows, error) {
 	followsIdKey := fmt.Sprintf("%s%v", cacheFollowsIdPrefix, id)
 	var resp Follows
