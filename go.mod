@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/qiniu/go-sdk/v7 v7.14.0
 	github.com/spf13/viper v1.15.0
+	github.com/yitter/idgenerator-go v1.3.2
 	github.com/zeromicro/go-zero v1.4.4
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d

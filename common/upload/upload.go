@@ -1,8 +1,8 @@
 package upload
 
 import (
+	"bytes"
 	"context"
-	"mime/multipart"
 	"strconv"
 
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
@@ -16,7 +16,7 @@ import (
 // https://developer.qiniu.com/kodo
 
 // ToQiNiu 上传文件到七牛云对象存储
-func UploadVideo(file multipart.File, fileSize, videoID int64) (string, error) {
+func UploadVideo(file *[]byte, videoID int64) (string, error) {
 	//自定义凭证有效期（示例2小时，Expires 单位为秒，为上传凭证的有效时间）
 	bucket := "mini-douyin"
 	accessKey := "rh21CFIGeHdD0OAW0Cr-618hZ1SEdXhCR5RicAxQ"
@@ -38,16 +38,16 @@ func UploadVideo(file multipart.File, fileSize, videoID int64) (string, error) {
 
 	formUploader := storage.NewFormUploader(&cfg)
 	ret := storage.PutRet{}
-
+	fileSize := len(*file)
 	key := "video/" + strconv.FormatInt(videoID, 10) + ".mp4"
-	err := formUploader.Put(context.Background(), &ret, upToken, key, file, fileSize, &putExtra)
+	err := formUploader.Put(context.Background(), &ret, upToken, key, bytes.NewReader(*file), int64(fileSize), &putExtra)
 	if err != nil {
 		return "", err
 	}
 	url := "http://" + QiNiuServer + "/" + ret.Key
 	return url, nil
 }
-func UploadCover(file multipart.File, fileSize, videoID int64) (string, error) {
+func UploadCover(file *[]byte, videoID int64) (string, error) {
 	//自定义凭证有效期（示例2小时，Expires 单位为秒，为上传凭证的有效时间）
 	bucket := "mini-douyin"
 	accessKey := "rh21CFIGeHdD0OAW0Cr-618hZ1SEdXhCR5RicAxQ"
@@ -66,12 +66,12 @@ func UploadCover(file multipart.File, fileSize, videoID int64) (string, error) {
 	}
 
 	putExtra := storage.PutExtra{}
-
 	formUploader := storage.NewFormUploader(&cfg)
 	ret := storage.PutRet{}
 
-	key := "cover/" + strconv.FormatInt(videoID, 10) + ".mp4"
-	err := formUploader.Put(context.Background(), &ret, upToken, key, file, fileSize, &putExtra)
+	key := "cover/" + strconv.FormatInt(videoID, 10) + ".jpg"
+	fileSize := len(*file)
+	err := formUploader.Put(context.Background(), &ret, upToken, key, bytes.NewReader(*file), int64(fileSize), &putExtra)
 	if err != nil {
 		return "", err
 	}

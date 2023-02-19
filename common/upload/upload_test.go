@@ -2,20 +2,13 @@ package upload
 
 import (
 	"fmt"
-	"os"
+	"io/ioutil"
 	"testing"
 )
 
 func TestUploadFile(t *testing.T) {
-	file, _ := os.Open("./test.mp4")
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			panic(err)
-		}
-	}(file)
-	fi, _ := os.Stat("./test.mp4")
-	url, err := UploadVideo(file, fi.Size(), 3254531)
+	data, err := ioutil.ReadFile("./test.mp4")
+	url, err := UploadVideo(&data, 3214432254531)
 	if err != nil {
 		panic(err)
 	}
