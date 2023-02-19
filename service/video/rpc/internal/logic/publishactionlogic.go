@@ -49,7 +49,6 @@ func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest)
 		return nil, err
 	}
 	video_t := model.Videos{
-		Id:            0,
 		CreateAt:      time.Now(),
 		DeletedAt:     sql.NullTime{},
 		UpdateTime:    time.Now(),
