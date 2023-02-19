@@ -69,18 +69,24 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 				Avatar:          &author.Avatar.String,
 				BackgroundImage: &author.BackgroundImage.String,
 				Signature:       &author.Signature.String,
-				TotalFavorited:  nil,
+				TotalFavorited:  &author.TotalFavorited.Int64, //获赞数量
 				WorkCount:       &author.WorkCount.Int64,
-				FavoriteCount:   &author.FavoriteCount.Int64,
+				FavoriteCount:   &author.FavoriteCount.Int64, //点赞数量
 			},
-			PlayUrl:       "",
-			CoverUrl:      "",
-			FavoriteCount: 0,
-			CommentCount:  0,
+			PlayUrl:       v.PlayUrl,
+			CoverUrl:      v.CoverUrl,
+			FavoriteCount: v.FavoriteCount,
+			CommentCount:  v.CommentCount,
 			IsFavorite:    false,
-			Title:         "",
+			Title:         v.Title,
 		}
+		vs = append(vs, video_t)
 	}
-
-	return &video.DouyinFeedResponse{}, nil
+	nextTime = videos[len(videos)-1].UpdateTime.UnixMilli()
+	return &video.DouyinFeedResponse{
+		StatusCode: int32(errno.OK.Code),
+		StatusMsg:  &errno.OK.Message,
+		VideoList:  vs,
+		NextTime:   &nextTime,
+	}, nil
 }
