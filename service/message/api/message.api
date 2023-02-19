@@ -1,0 +1,43 @@
+type (
+    //聊天记录
+    Douyin_message_chat_request {
+        Token string `form:"token"`
+        ToUserID string `form:"to_user_id"`
+    }
+
+    Douyin_message_chat_response {
+        StatusCode string `json:"status_code"`
+        StatusMsg string `json:"status_msg"`
+        MessageList []Douyin_message `json:"message_list"`
+    }
+    Douyin_message {
+        ID int `json:"id"`
+        ToUserID int `json:"to_user_id"`
+        FromUserID int `json:"from_user_id"`
+        Content string `json:"content"`
+        CreateTime int `json:"create_time"`
+    }
+        // 聊天记录
+
+        // 发送消息
+    Douyin_message_action_request {
+        Token string `form:"token"`
+        ToUserID string `form:"to_user_id"`
+        ActionType string `form:"action_type"`
+        Content string `form:"content"`
+    }
+    Douyin_message_action_response {
+        StatusCode int `json:"status_code"`
+        StatusMsg string `json:"status_msg"`
+    }
+        // 发送消息
+
+)
+
+service Message{
+    @handler Action
+    post /douyin/message/action (Douyin_message_action_request) returns (Douyin_message_action_response)
+
+    @handler Chat
+    get /douyin/user/register (Douyin_message_chat_request) returns (Douyin_message_chat_response)
+}

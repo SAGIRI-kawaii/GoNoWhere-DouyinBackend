@@ -22,7 +22,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DouyinRelationServiceClient interface {
-	FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error)
 	Chat(ctx context.Context, in *DouyinMessageChatRequest, opts ...grpc.CallOption) (*DouyinMessageChatResponse, error)
 	Action(ctx context.Context, in *DouyinRelationActionRequest, opts ...grpc.CallOption) (*DouyinRelationActionResponse, error)
 }
@@ -33,15 +32,6 @@ type douyinRelationServiceClient struct {
 
 func NewDouyinRelationServiceClient(cc grpc.ClientConnInterface) DouyinRelationServiceClient {
 	return &douyinRelationServiceClient{cc}
-}
-
-func (c *douyinRelationServiceClient) FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error) {
-	out := new(DouyinRelationFriendListResponse)
-	err := c.cc.Invoke(ctx, "/messageClient.DouyinRelationService/FriendList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *douyinRelationServiceClient) Chat(ctx context.Context, in *DouyinMessageChatRequest, opts ...grpc.CallOption) (*DouyinMessageChatResponse, error) {
@@ -66,7 +56,6 @@ func (c *douyinRelationServiceClient) Action(ctx context.Context, in *DouyinRela
 // All implementations must embed UnimplementedDouyinRelationServiceServer
 // for forward compatibility
 type DouyinRelationServiceServer interface {
-	FriendList(context.Context, *DouyinRelationFriendListRequest) (*DouyinRelationFriendListResponse, error)
 	Chat(context.Context, *DouyinMessageChatRequest) (*DouyinMessageChatResponse, error)
 	Action(context.Context, *DouyinRelationActionRequest) (*DouyinRelationActionResponse, error)
 	mustEmbedUnimplementedDouyinRelationServiceServer()
@@ -76,9 +65,6 @@ type DouyinRelationServiceServer interface {
 type UnimplementedDouyinRelationServiceServer struct {
 }
 
-func (UnimplementedDouyinRelationServiceServer) FriendList(context.Context, *DouyinRelationFriendListRequest) (*DouyinRelationFriendListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FriendList not implemented")
-}
 func (UnimplementedDouyinRelationServiceServer) Chat(context.Context, *DouyinMessageChatRequest) (*DouyinMessageChatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Chat not implemented")
 }
@@ -96,24 +82,6 @@ type UnsafeDouyinRelationServiceServer interface {
 
 func RegisterDouyinRelationServiceServer(s grpc.ServiceRegistrar, srv DouyinRelationServiceServer) {
 	s.RegisterService(&DouyinRelationService_ServiceDesc, srv)
-}
-
-func _DouyinRelationService_FriendList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DouyinRelationFriendListRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DouyinRelationServiceServer).FriendList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/messageClient.DouyinRelationService/FriendList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DouyinRelationServiceServer).FriendList(ctx, req.(*DouyinRelationFriendListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _DouyinRelationService_Chat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -159,10 +127,6 @@ var DouyinRelationService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "messageClient.DouyinRelationService",
 	HandlerType: (*DouyinRelationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "FriendList",
-			Handler:    _DouyinRelationService_FriendList_Handler,
-		},
 		{
 			MethodName: "Chat",
 			Handler:    _DouyinRelationService_Chat_Handler,

@@ -13,18 +13,15 @@ import (
 )
 
 type (
-	DouyinMessageChatRequest         = message.DouyinMessageChatRequest
-	DouyinMessageChatResponse        = message.DouyinMessageChatResponse
-	DouyinRelationActionRequest      = message.DouyinRelationActionRequest
-	DouyinRelationActionResponse     = message.DouyinRelationActionResponse
-	DouyinRelationFriendListRequest  = message.DouyinRelationFriendListRequest
-	DouyinRelationFriendListResponse = message.DouyinRelationFriendListResponse
-	FriendUser                       = message.FriendUser
-	Message                          = message.Message
-	User                             = message.User
+	DouyinMessageChatRequest     = message.DouyinMessageChatRequest
+	DouyinMessageChatResponse    = message.DouyinMessageChatResponse
+	DouyinRelationActionRequest  = message.DouyinRelationActionRequest
+	DouyinRelationActionResponse = message.DouyinRelationActionResponse
+	FriendUser                   = message.FriendUser
+	Message                      = message.Message
+	User                         = message.User
 
 	DouyinRelationService interface {
-		FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error)
 		Chat(ctx context.Context, in *DouyinMessageChatRequest, opts ...grpc.CallOption) (*DouyinMessageChatResponse, error)
 		Action(ctx context.Context, in *DouyinRelationActionRequest, opts ...grpc.CallOption) (*DouyinRelationActionResponse, error)
 	}
@@ -38,11 +35,6 @@ func NewDouyinRelationService(cli zrpc.Client) DouyinRelationService {
 	return &defaultDouyinRelationService{
 		cli: cli,
 	}
-}
-
-func (m *defaultDouyinRelationService) FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error) {
-	client := message.NewDouyinRelationServiceClient(m.cli.Conn())
-	return client.FriendList(ctx, in, opts...)
 }
 
 func (m *defaultDouyinRelationService) Chat(ctx context.Context, in *DouyinMessageChatRequest, opts ...grpc.CallOption) (*DouyinMessageChatResponse, error) {

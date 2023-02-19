@@ -22,11 +22,6 @@ func NewDouyinRelationServiceServer(svcCtx *svc.ServiceContext) *DouyinRelationS
 	}
 }
 
-func (s *DouyinRelationServiceServer) FriendList(ctx context.Context, in *message.DouyinRelationFriendListRequest) (*message.DouyinRelationFriendListResponse, error) {
-	l := logic.NewFriendListLogic(ctx, s.svcCtx)
-	return l.FriendList(in)
-}
-
 func (s *DouyinRelationServiceServer) Chat(ctx context.Context, in *message.DouyinMessageChatRequest) (*message.DouyinMessageChatResponse, error) {
 	l := logic.NewChatLogic(ctx, s.svcCtx)
 	return l.Chat(in)
