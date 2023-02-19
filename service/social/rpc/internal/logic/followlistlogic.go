@@ -43,10 +43,17 @@ func (l *FollowListLogic) FollowList(in *follow.DouyinRelationFollowListRequest)
 			return nil, status.Error(100, "查询用户失败")
 		}
 		us := &follow.User{
-			Id:            res.Id,
-			Name:          res.Name,
-			FollowCount:   res.FollowerCount,
-			FollowerCount: res.FollowerCount,
+			Id:              res.Id,
+			Name:            res.Name,
+			FollowCount:     &res.FollowerCount,
+			FollowerCount:   &res.FollowerCount,
+			IsFollow:        true,
+			Avatar:          &res.Avatar.String,
+			BackgroundImage: &res.BackgroundImage.String,
+			Signature:       &res.Signature.String,
+			TotalFavorited:  &res.TotalFavorited.Int64,
+			WorkCount:       &res.WorkCount.Int64,
+			FavoriteCount:   &res.FavoriteCount.Int64,
 		}
 		u = append(u, us)
 
