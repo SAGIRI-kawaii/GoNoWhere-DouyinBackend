@@ -4,6 +4,7 @@ import (
 	"context"
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/cryptx"
+	"mini-douyin/common/jwtx"
 	"mini-douyin/service/user/model"
 
 	"mini-douyin/service/user/rpc/internal/svc"
@@ -43,8 +44,13 @@ func (l *LoginLogic) Login(in *user.DouyinUserLoginRequest) (*user.DouyinUserLog
 	if res.PassWord != password {
 		return nil, status.Error(100, "密码错误")
 	}
+	token, err := jwtx.GenerateToken(res.Id)
+	if err != nil {
+		return nil, status.Error(100, "签发token失败")
+	}
 	return &user.DouyinUserLoginResponse{
 		UserId: res.Id,
+		Token:  token,
 	}, nil
 
 }

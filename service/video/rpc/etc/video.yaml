@@ -1,5 +1,10 @@
 Name: video.rpc
-ListenOn: 0.0.0.0:9001
+ListenOn: 0.0.0.0:9000
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: video.rpc
+
 
 Mysql:
   DataSource: where:where@tcp(8.142.30.177:3306)/gonowhere?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
@@ -10,7 +15,3 @@ CacheRedis:
 
 Salt: HWVOFkGgPTryzICwd7qnJaZR9KQ2i8xe
 
-Etcd:
-  Hosts:
-    - 127.0.0.1:2379
-  Key: user.rpc

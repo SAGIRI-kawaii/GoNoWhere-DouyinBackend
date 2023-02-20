@@ -2,9 +2,8 @@
 package handler
 
 import (
-	"net/http"
-
 	"mini-douyin/service/video/api/internal/svc"
+	"net/http"
 
 	"github.com/zeromicro/go-zero/rest"
 )

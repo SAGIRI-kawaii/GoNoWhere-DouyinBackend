@@ -1,4 +1,4 @@
-package videos
+package model
 
 import "github.com/zeromicro/go-zero/core/stores/sqlx"
 

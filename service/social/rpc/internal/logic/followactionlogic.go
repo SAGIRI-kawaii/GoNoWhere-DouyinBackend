@@ -32,10 +32,13 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 	//根据ActionType判断操作类型
 	if in.ActionType == 1 {
 		// 在follow表中插入一条记录
-		userid, err := jwtx.ParseToken2Uid("a", in.Token)
+		claims, err := jwtx.ParseToken(in.Token)
+		userid := claims.UserID
+
+		/*userid, err := jwtx.ParseToken2Uid("a", in.Token)
 		if err != nil {
 			return nil, err
-		}
+		}*/
 
 		newFollow := follows.Follows{
 			UserId:   int64(userid),
