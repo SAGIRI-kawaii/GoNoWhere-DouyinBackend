@@ -6,7 +6,8 @@ import (
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/cryptx"
 	"mini-douyin/common/jwtx"
-	"mini-douyin/service/user/model"
+	"mini-douyin/service/user/model/logins"
+	"mini-douyin/service/user/model/users"
 	"mini-douyin/service/user/rpc/internal/svc"
 	"mini-douyin/service/user/rpc/user"
 	"time"
@@ -37,8 +38,8 @@ func (l *RegisterLogic) Register(in *user.DouyinUserRegisterRequest) (*user.Douy
 		return nil, status.Error(100, "用户名已存在")
 	}
 
-	if err == model.ErrNotFound {
-		newUser := model.Logins{
+	if err == users.ErrNotFound {
+		newUser := logins.Logins{
 			Name:     in.Username,
 			PassWord: cryptx.PasswordEncrypt(l.svcCtx.Config.Salt, in.Password),
 		}
@@ -51,7 +52,7 @@ func (l *RegisterLogic) Register(in *user.DouyinUserRegisterRequest) (*user.Douy
 		if err != nil {
 			return nil, status.Error(100, "error")
 		}
-		_, err = l.svcCtx.UserModel.Insert(l.ctx, &model.Users{
+		_, err = l.svcCtx.UserModel.Insert(l.ctx, &users.Users{
 			Id:              newUser.Id,
 			CreateAt:        time.Time{},
 			DeletedAt:       sql.NullTime{},

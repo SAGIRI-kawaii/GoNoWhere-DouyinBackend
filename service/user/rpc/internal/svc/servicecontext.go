@@ -1,7 +1,8 @@
 package svc
 
 import (
-	"mini-douyin/service/user/model"
+	"mini-douyin/service/user/model/logins"
+	"mini-douyin/service/user/model/users"
 
 	"mini-douyin/service/user/rpc/internal/config"
 
@@ -11,15 +12,15 @@ import (
 type ServiceContext struct {
 	Config config.Config
 
-	UserModel  model.UsersModel
-	LoginModel model.LoginsModel
+	UserModel  users.UsersModel
+	LoginModel logins.LoginsModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	conn := sqlx.NewMysql(c.Mysql.DataSource)
 	return &ServiceContext{
 		Config:     c,
-		UserModel:  model.NewUsersModel(conn, c.CacheRedis),
-		LoginModel: model.NewLoginsModel(conn, c.CacheRedis),
+		UserModel:  users.NewUsersModel(conn, c.CacheRedis),
+		LoginModel: logins.NewLoginsModel(conn, c.CacheRedis),
 	}
 }

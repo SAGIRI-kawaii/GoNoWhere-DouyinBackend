@@ -4,7 +4,7 @@ import (
 	"context"
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/jwtx"
-	"mini-douyin/service/user/model"
+	"mini-douyin/service/user/model/users"
 
 	"mini-douyin/service/user/rpc/internal/svc"
 	"mini-douyin/service/user/rpc/user"
@@ -33,7 +33,7 @@ func (l *UserInfoLogic) UserInfo(in *user.DouyinUserRequest) (*user.DouyinUserRe
 	claims, _ := jwtx.ParseToken(in.Token)
 	res, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, claims.UserID)
 	if err != nil {
-		if err == model.ErrNotFound {
+		if err == users.ErrNotFound {
 			return nil, status.Error(100, "用户不存在")
 		}
 		return nil, status.Error(100, "查询用户失败")

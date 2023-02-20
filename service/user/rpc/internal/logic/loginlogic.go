@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/cryptx"
 	"mini-douyin/common/jwtx"
-	"mini-douyin/service/user/model"
+	"mini-douyin/service/user/model/users"
 
 	"mini-douyin/service/user/rpc/internal/svc"
 	"mini-douyin/service/user/rpc/user"
@@ -33,7 +33,7 @@ func (l *LoginLogic) Login(in *user.DouyinUserLoginRequest) (*user.DouyinUserLog
 	//println(in.Username)
 	res, err := l.svcCtx.LoginModel.FindOneByName(l.ctx, in.Username)
 	if err != nil {
-		if err == model.ErrNotFound {
+		if err == users.ErrNotFound {
 			return nil, status.Error(100, "用户不存在")
 		}
 		return nil, status.Error(100, "查询用户失败")
