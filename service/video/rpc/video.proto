@@ -1,5 +1,8 @@
 syntax = "proto3";
-package douyin.core;
+
+package video;
+
+option go_package = "./video";
 
 //视频投稿
 message douyin_publish_action_request {
@@ -65,3 +68,9 @@ message User {
   bool is_follow = 5; // true-已关注，false-未关注
 }
 //common
+
+service VideoService {
+  rpc publish_action(douyin_publish_action_request) returns (douyin_publish_action_response);
+  rpc publish_list(douyin_publish_list_request) returns (douyin_publish_list_response);
+  rpc feed(douyin_feed_request) returns (douyin_feed_response);
+}

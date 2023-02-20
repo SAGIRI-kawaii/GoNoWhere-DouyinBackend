@@ -2,12 +2,11 @@ package logic
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/logx"
 	"mini-douyin/service/user/api/internal/svc"
 	"mini-douyin/service/user/api/internal/types"
 	"mini-douyin/service/user/rpc/userclient"
 	"strconv"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type LoginLogic struct {
@@ -50,7 +49,7 @@ func (l *LoginLogic) Login(req *types.Douyin_user_login_request) (resp *types.Do
 	}
 	//println("token@:" + accessToken)
 	return &types.Douyin_user_login_response{
-		StatusCode: int(0),
+		StatusCode: 0,
 		StatusMsg:  "success",
 		UserID:     int(res.UserId),
 		Token:      strconv.FormatInt(res.UserId, 10),

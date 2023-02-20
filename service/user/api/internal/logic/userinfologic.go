@@ -2,13 +2,11 @@ package logic
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/logx"
 	"mini-douyin/common/jwtx"
 	"mini-douyin/service/user/api/internal/svc"
 	"mini-douyin/service/user/api/internal/types"
 	"mini-douyin/service/user/rpc/userclient"
-	"strconv"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type UserInfoLogic struct {
@@ -28,9 +26,7 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 func (l *UserInfoLogic) UserInfo(req *types.Douyin_user_request) (resp *types.Douyin_user_response, err error) {
 	// todo: add your logic here and delete this line
 
-	token, err := strconv.ParseInt(req.Token, 10, 64)
-	res1, err := jwtx.ParseToken2Uid(l.svcCtx.Config.Auth.AccessSecret, uint64(token))
-
+	res1, err := jwtx.ParseToken2Uid(l.svcCtx.Config.Auth.AccessSecret, req.Token)
 	if err != nil {
 		return nil, err
 	}

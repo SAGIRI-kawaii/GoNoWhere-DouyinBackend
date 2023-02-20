@@ -45,13 +45,19 @@ type (
 	}
 
 	Users struct {
-		Id            int64        `db:"id"` // 自增主键
-		CreateAt      time.Time    `db:"create_at"`
-		DeletedAt     sql.NullTime `db:"deleted_at"`
-		Name          string       `db:"name"`
-		FollowCount   int64        `db:"follow_count"`
-		FollowerCount int64        `db:"follower_count"`
-		UserId        int64        `db:"user_id"`
+		Id              int64          `db:"id"`
+		CreateAt        time.Time      `db:"create_at"`
+		DeletedAt       sql.NullTime   `db:"deleted_at"`
+		Name            string         `db:"name"`
+		FollowCount     int64          `db:"follow_count"`
+		FollowerCount   int64          `db:"follower_count"`
+		UserId          int64          `db:"user_id"`
+		Avatar          sql.NullString `db:"avatar"`
+		BackgroundImage sql.NullString `db:"background_image"`
+		Signature       sql.NullString `db:"signature"`
+		TotalFavorited  sql.NullInt64  `db:"total_favorited"`
+		WorkCount       sql.NullInt64  `db:"work_count"`
+		FavoriteCount   sql.NullInt64  `db:"favorite_count"`
 	}
 )
 
@@ -118,8 +124,8 @@ func (m *defaultUsersModel) Insert(ctx context.Context, data *Users) (sql.Result
 	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
 	usersUserIdKey := fmt.Sprintf("%s%v", cacheUsersUserIdPrefix, data.UserId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, usersRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Name, data.FollowCount, data.FollowerCount, data.UserId)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, usersRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Name, data.FollowCount, data.FollowerCount, data.UserId, data.Avatar, data.BackgroundImage, data.Signature, data.TotalFavorited, data.WorkCount, data.FavoriteCount)
 	}, usersIdKey, usersUserIdKey)
 	return ret, err
 }
@@ -134,7 +140,7 @@ func (m *defaultUsersModel) Update(ctx context.Context, newData *Users) error {
 	usersUserIdKey := fmt.Sprintf("%s%v", cacheUsersUserIdPrefix, data.UserId)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.DeletedAt, newData.Name, newData.FollowCount, newData.FollowerCount, newData.UserId, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.DeletedAt, newData.Name, newData.FollowCount, newData.FollowerCount, newData.UserId, newData.Avatar, newData.BackgroundImage, newData.Signature, newData.TotalFavorited, newData.WorkCount, newData.FavoriteCount, newData.Id)
 	}, usersIdKey, usersUserIdKey)
 	return err
 }
@@ -143,25 +149,18 @@ func (m *defaultUsersModel) AddFollowerByUserId(ctx context.Context, uid int64) 
 	if err != nil {
 		return err
 	}
-	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
-	usersUserIdKey := fmt.Sprintf("%s%v", cacheUsersUserIdPrefix, data.UserId)
-	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Name, data.FollowCount, data.FollowerCount+1, data.UserId, data.Id)
-	}, usersIdKey, usersUserIdKey)
+	data.FollowerCount = data.FollowCount + 1
+	err = m.Update(ctx, data)
 	return err
+
 }
 func (m *defaultUsersModel) AddFollowByUserId(ctx context.Context, uid int64) error {
 	data, err := m.FindOneByUserId(ctx, uid)
 	if err != nil {
 		return err
 	}
-	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
-	usersUserIdKey := fmt.Sprintf("%s%v", cacheUsersUserIdPrefix, data.UserId)
-	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Name, data.FollowCount+1, data.FollowerCount, data.UserId, data.Id)
-	}, usersIdKey, usersUserIdKey)
+	data.FollowerCount = data.FollowerCount + 1
+	err = m.Update(ctx, data)
 	return err
 }
 func (m *defaultUsersModel) ReduceFollowByUserId(ctx context.Context, uid int64) error {
@@ -169,12 +168,8 @@ func (m *defaultUsersModel) ReduceFollowByUserId(ctx context.Context, uid int64)
 	if err != nil {
 		return err
 	}
-	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
-	usersUserIdKey := fmt.Sprintf("%s%v", cacheUsersUserIdPrefix, data.UserId)
-	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Name, data.FollowCount-1, data.FollowerCount, data.UserId, data.Id)
-	}, usersIdKey, usersUserIdKey)
+	data.FollowerCount = data.FollowCount - 1
+	err = m.Update(ctx, data)
 	return err
 }
 func (m *defaultUsersModel) ReduceFollowerByUserId(ctx context.Context, uid int64) error {
@@ -182,13 +177,10 @@ func (m *defaultUsersModel) ReduceFollowerByUserId(ctx context.Context, uid int6
 	if err != nil {
 		return err
 	}
-	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
-	usersUserIdKey := fmt.Sprintf("%s%v", cacheUsersUserIdPrefix, data.UserId)
-	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeletedAt, data.Name, data.FollowCount, data.FollowerCount-1, data.UserId, data.Id)
-	}, usersIdKey, usersUserIdKey)
+	data.FollowerCount = data.FollowerCount - 1
+	err = m.Update(ctx, data)
 	return err
+
 }
 
 func (m *defaultUsersModel) formatPrimary(primary interface{}) string {
