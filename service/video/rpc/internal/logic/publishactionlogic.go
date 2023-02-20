@@ -58,6 +58,7 @@ func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest)
 	}
 	_, err = l.svcCtx.VideoModel.Insert(l.ctx, &video_t)
 	if err != nil {
+		upload.DeleteVideo(videoID)
 		return nil, err
 	}
 	return &video.DouyinPublishActionResponse{
