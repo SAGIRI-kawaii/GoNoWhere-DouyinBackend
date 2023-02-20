@@ -6,7 +6,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"mini-douyin/service/message/model"
+
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
@@ -80,8 +80,6 @@ func (m *defaultFriendsModel) FindOne(ctx context.Context, id int64) (*Friends, 
 	switch err {
 	case nil:
 		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, model.ErrNotFound
 	default:
 		return nil, err
 	}
@@ -93,8 +91,6 @@ func (m *defaultFriendsModel) FindOneByBothway(ctx context.Context, id1 int64, i
 	switch err {
 	case nil:
 		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, model.ErrNotFound
 	default:
 		return nil, err
 	}

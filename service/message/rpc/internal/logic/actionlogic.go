@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/jwtx"
-	"mini-douyin/service/message/model"
+	"mini-douyin/service/message/model/messages"
 	"mini-douyin/service/message/rpc/internal/svc"
 	"mini-douyin/service/message/rpc/message"
 	"time"
@@ -34,7 +34,7 @@ func (l *ActionLogic) Action(in *message.DouyinRelationActionRequest) (*message.
 		if err != nil || res1 == 0 {
 			return nil, status.Error(100, "Token解析失败")
 		}
-		newMessage := follows.Messages{
+		newMessage := messages.Messages{
 			UserId:   sql.NullInt64{Valid: true, Int64: res1},
 			ToUserId: sql.NullInt64{Valid: true, Int64: in.ToUserId},
 			Content:  sql.NullString{Valid: true, String: in.Content},

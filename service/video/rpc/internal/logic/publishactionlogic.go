@@ -11,7 +11,6 @@ import (
 	"mini-douyin/service/video/model"
 	"mini-douyin/service/video/rpc/internal/svc"
 	"mini-douyin/service/video/rpc/video"
-	"strconv"
 )
 
 type PublishActionLogic struct {
@@ -33,11 +32,9 @@ func NewPublishActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pub
 
 func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest) (*video.DouyinPublishActionResponse, error) {
 	// todo: add your logic here and delete this line
-	token, err := strconv.ParseInt(in.Token, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	userid, err := jwtx.ParseToken2Uid("a", uint64(token))
+
+	claims, err := jwtx.ParseToken(in.Token)
+	userid := claims.UserID
 	if err != nil {
 		return nil, err
 	}

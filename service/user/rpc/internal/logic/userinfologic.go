@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"google.golang.org/grpc/status"
+	"mini-douyin/common/jwtx"
 	"mini-douyin/service/user/model"
 
 	"mini-douyin/service/user/rpc/internal/svc"
@@ -28,7 +29,9 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 func (l *UserInfoLogic) UserInfo(in *user.DouyinUserRequest) (*user.DouyinUserResponse, error) {
 	// todo: add your logic here and delete this line
 	//查询用户是否存在
-	res, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, in.UserId)
+
+	claims, _ := jwtx.ParseToken(in.Token)
+	res, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, claims.UserID)
 	if err != nil {
 		if err == model.ErrNotFound {
 			return nil, status.Error(100, "用户不存在")
