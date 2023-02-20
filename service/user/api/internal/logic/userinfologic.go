@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
-	"mini-douyin/common/jwtx"
 	"mini-douyin/service/user/api/internal/svc"
 	"mini-douyin/service/user/api/internal/types"
 	"mini-douyin/service/user/rpc/userclient"
@@ -26,12 +25,8 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 func (l *UserInfoLogic) UserInfo(req *types.Douyin_user_request) (resp *types.Douyin_user_response, err error) {
 	// todo: add your logic here and delete this line
 
-	res1, err := jwtx.ParseToken2Uid(l.svcCtx.Config.Auth.AccessSecret, req.Token)
-	if err != nil {
-		return nil, err
-	}
 	res, err := l.svcCtx.UserRpc.UserInfo(l.ctx, &userclient.DouyinUserRequest{
-		UserId: int64(res1),
+		Token: req.Token,
 	})
 	if err != nil {
 		return nil, err

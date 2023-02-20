@@ -30,7 +30,15 @@ message douyin_publish_list_response {
 
 //发布列表
 
-
+message douyin_search_request {
+  int64 video_id=1;
+  string token=2;
+}
+message douyin_search_response {
+  int32 status_code = 1; // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  Video video=3;
+}
 //视频流
 message douyin_feed_request {
   optional int64 latest_time = 1; // 可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
@@ -76,4 +84,5 @@ service VideoService {
   rpc publish_action(douyin_publish_action_request) returns (douyin_publish_action_response);
   rpc publish_list(douyin_publish_list_request) returns (douyin_publish_list_response);
   rpc feed(douyin_feed_request) returns (douyin_feed_response);
+  rpc search_video(douyin_search_request) returns(douyin_search_response);
 }

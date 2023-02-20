@@ -35,6 +35,7 @@ type (
 		Delete(ctx context.Context, id int64) error
 		GetFeedVideos(ctx context.Context, limit int, latestTime *int64) ([]*Videos, error)
 		GetVideosByAuthorID(ctx context.Context, authorid *int64) ([]*Videos, error)
+		GetVideosByVideoID(ctx context.Context, videoid *int64) (*Videos, error)
 	}
 
 	defaultVideosModel struct {
@@ -86,6 +87,20 @@ func (m *defaultVideosModel) GetVideosByAuthorID(ctx context.Context, authorid *
 	var resp []*Videos
 	query := fmt.Sprintf("select %s from %s where `author_id` = ? ", videosRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, *authorid)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+
+}
+func (m *defaultVideosModel) GetVideosByVideoID(ctx context.Context, videoid *int64) (*Videos, error) {
+	var resp *Videos
+	query := fmt.Sprintf("select %s from %s where `video_id` = ? ", videosRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, *videoid)
 	switch err {
 	case nil:
 		return resp, nil

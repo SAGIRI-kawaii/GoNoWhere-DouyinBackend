@@ -45,6 +45,7 @@ func (l *PublishListLogic) PublishList(in *video.DouyinPublishListRequest) (*vid
 	if err != nil {
 		return nil, err
 	}
+
 	author := &video.User{
 		Id:              au.UserId,
 		Name:            au.Name,

@@ -3,6 +3,7 @@ package upload
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
@@ -77,4 +78,23 @@ func UploadCover(file *[]byte, videoID int64) (string, error) {
 	}
 	url := "http://" + QiNiuServer + "/" + ret.Key
 	return url, nil
+}
+func DeleteVideo(videoID int64) (string, error) {
+	bucket := "mini-douyin"
+	accessKey := "rh21CFIGeHdD0OAW0Cr-618hZ1SEdXhCR5RicAxQ"
+	secretKey := "elpJGvJh_PJQgdgZxxSkytBGxeIO_POO8VTuW_an"
+	mac := qbox.NewMac(accessKey, secretKey)
+	cfg := storage.Config{
+		Zone:          &storage.ZoneHuanan,
+		UseCdnDomains: false,
+		UseHTTPS:      false,
+	}
+	bucketManager := storage.NewBucketManager(mac, &cfg)
+	key := "video/" + strconv.FormatInt(videoID, 10) + ".mp4"
+	err := bucketManager.Delete(bucket, key)
+	if err != nil {
+		fmt.Println(err)
+		return "Delete Error", err
+	}
+	return "Success", nil
 }

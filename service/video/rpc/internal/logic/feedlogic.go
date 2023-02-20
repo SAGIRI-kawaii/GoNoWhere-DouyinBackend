@@ -6,7 +6,6 @@ import (
 	"mini-douyin/common/jwtx"
 	"mini-douyin/service/video/rpc/internal/svc"
 	"mini-douyin/service/video/rpc/video"
-	"strconv"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -29,8 +28,8 @@ func NewFeedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedLogic {
 func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse, error) {
 	// todo: add your logic here and delete this line
 	var vs []*video.Video
-	token, err := strconv.ParseInt(*in.Token, 10, 64)
-	userid, err := jwtx.ParseToken2Uid("a", uint64(token))
+	claims, err := jwtx.ParseToken(*in.Token)
+	userid := claims.UserID
 	if err != nil {
 		return nil, err
 	}
