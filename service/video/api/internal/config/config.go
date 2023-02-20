@@ -7,11 +7,10 @@ import (
 
 type Config struct {
 	rest.RestConf
-
 	Auth struct {
 		AccessSecret string
 		AccessExpire int64
 	}
 
-	VideoRpc zrpc.RpcClientConf
+	UserRpc zrpc.RpcClientConf
 }

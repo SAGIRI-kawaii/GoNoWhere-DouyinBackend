@@ -1,71 +1,71 @@
 type (
-	// 视频投稿
-	Duyin_publish_action_request {
-		Token string `json:"token"`
-		Data  byte   `json:"data"`
-		Title string `json:"title"`
-	}
+    // 视频投稿
+    Duyin_publish_action_request {
+        Token string `json:"token"`
+        Data  byte   `json:"data"`
+        Title string `json:"title"`
+    }
 
-	Duyin_publish_action_response {
-		StatusCode int    `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
-	}
-	// 视频投稿
+    Duyin_publish_action_response {
+        StatusCode int    `json:"status_code"`
+        StatusMsg  string `json:"status_msg"`
+    }
+        // 视频投稿
 
-	// 发布列表
-	Douyin_publish_list_request {
-		LatestTime string `json:"latest_time"`
-		Token      string `json:"token"`
-	}
-	Douyin_publish_list_response {
-		StatusCode int         `json:"status_code"`
-		StatusMsg  string      `json:"status_msg"`
-		NextTime   int         `json:"next_time"`
-		VideoList  []VideoList `json:"video_list"`
-	}
-	// 发布列表
+        // 发布列表
+    Douyin_publish_list_request {
+        LatestTime string `json:"latest_time"`
+        Token      string `json:"token"`
+    }
+    Douyin_publish_list_response {
+        StatusCode int         `json:"status_code"`
+        StatusMsg  string      `json:"status_msg"`
+        NextTime   int         `json:"next_time"`
+        VideoList  []VideoList `json:"video_list"`
+    }
+        // 发布列表
 
-	// 视频流
-	Douyin_feed_request {
-		Token  string `json:"token"`
-		UserID string `json:"user_id"`
-	}
-	Douyin_feed_response {
-		StatusCode int         `json:"status_code"`
-		StatusMsg  string      `json:"status_msg"`
-		VideoList  []VideoList `json:"video_list"`
-	}
+        // 视频流
+    Douyin_feed_request {
+        Token  string `json:"token"`
+        UserID string `json:"user_id"`
+    }
+    Douyin_feed_response {
+        StatusCode int         `json:"status_code"`
+        StatusMsg  string      `json:"status_msg"`
+        VideoList  []VideoList `json:"video_list"`
+    }
 
-	// 视频流
+        // 视频流
 
-	//Common
-	Author {
-		ID            int    `json:"id"`
-		Name          string `json:"name"`
-		FollowCount   int    `json:"follow_count"`
-		FollowerCount int    `json:"follower_count"`
-		IsFollow      bool   `json:"is_follow"`
-	}
-	VideoList {
-		ID            int    `json:"id"`
-		Author        Author `json:"author"`
-		PlayURL       string `json:"play_url"`
-		CoverURL      string `json:"cover_url"`
-		FavoriteCount int    `json:"favorite_count"`
-		CommentCount  int    `json:"comment_count"`
-		IsFavorite    bool   `json:"is_favorite"`
-		Title         string `json:"title"`
-	}
-	//Common
+        //Common
+    Author {
+        ID            int    `json:"id"`
+        Name          string `json:"name"`
+        FollowCount   int    `json:"follow_count"`
+        FollowerCount int    `json:"follower_count"`
+        IsFollow      bool   `json:"is_follow"`
+    }
+    VideoList {
+        ID            int    `json:"id"`
+        Author        Author `json:"author"`
+        PlayURL       string `json:"play_url"`
+        CoverURL      string `json:"cover_url"`
+        FavoriteCount int    `json:"favorite_count"`
+        CommentCount  int    `json:"comment_count"`
+        IsFavorite    bool   `json:"is_favorite"`
+        Title         string `json:"title"`
+    }
+    //Common
 )
 
 service Videos {
-	@handler Feed
-	get /douyin/feed (Douyin_feed_request) returns (Douyin_feed_response)
-	
-	@handler PublishList
-	get /douyin/publish/list (Douyin_publish_list_request) returns (Douyin_publish_list_response)
-	
-	@handler PublishAction
-	post /douyin/publish/action (Duyin_publish_action_request) returns (Duyin_publish_action_response)
+    @handler Feed
+    get /douyin/feed (Douyin_feed_request) returns (Douyin_feed_response)
+
+    @handler PublishList
+    get /douyin/publish/list (Douyin_publish_list_request) returns (Douyin_publish_list_response)
+
+    @handler PublishAction
+    post /douyin/publish/action (Duyin_publish_action_request) returns (Duyin_publish_action_response)
 }

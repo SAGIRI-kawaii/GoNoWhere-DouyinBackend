@@ -1,19 +1,17 @@
 syntax = "proto3";
+package videoclinet;
 
-package video;
-
-option go_package = "./video";
-
+option go_package="./video";
 //视频投稿
 message douyin_publish_action_request {
    string token = 1; // 用户鉴权token
-  bytes data = 2; // 视频数据
+   bytes data = 2; // 视频数据
    string title = 3; // 视频标题
 }
 
 message douyin_publish_action_response {
    int32 status_code = 1; // 状态码，0-成功，其他值-失败
-  optional string status_msg = 2; // 返回状态描述
+   optional string status_msg = 2; // 返回状态描述
 }
 //视频投稿
 
@@ -21,7 +19,7 @@ message douyin_publish_action_response {
 //发布列表
 message douyin_publish_list_request {
   int64 user_id = 1; // 用户id
- string token = 2; // 用户鉴权token
+  string token = 2; // 用户鉴权token
 }
 
 message douyin_publish_list_response {
@@ -66,9 +64,14 @@ message User {
   optional int64 follow_count = 3; // 关注总数
   optional int64 follower_count = 4; // 粉丝总数
   bool is_follow = 5; // true-已关注，false-未关注
+  optional string avatar = 6; //用户头像
+  optional string background_image = 7; //用户个人页顶部大图
+  optional string signature = 8; //个人简介
+  optional int64 total_favorited = 9; //获赞数量
+  optional int64 work_count = 10; //作品数量
+  optional int64 favorite_count = 11; //点赞数量
 }
 //common
-
 service VideoService {
   rpc publish_action(douyin_publish_action_request) returns (douyin_publish_action_response);
   rpc publish_list(douyin_publish_list_request) returns (douyin_publish_list_response);

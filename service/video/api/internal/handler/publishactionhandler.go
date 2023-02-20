@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"net/http"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 	"mini-douyin/service/video/api/internal/logic"
 	"mini-douyin/service/video/api/internal/svc"
 	"mini-douyin/service/video/api/internal/types"
+	"net/http"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func PublishActionHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

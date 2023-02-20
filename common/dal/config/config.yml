@@ -1,0 +1,15 @@
+mysql:
+  driverName: mysql
+  host: 8.142.30.177
+  port: 3306
+  database: gonowhere
+  username: where
+  password: where
+  charset: utf8mb
+
+etcd:
+  address: 127.0.0.1:2379
+
+redis:
+  address:
+  password:

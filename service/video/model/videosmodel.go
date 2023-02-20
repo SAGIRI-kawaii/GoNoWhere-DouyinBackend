@@ -1,6 +1,9 @@
-package videos
+package model
 
-import "github.com/zeromicro/go-zero/core/stores/sqlx"
+import (
+	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
+)
 
 var _ VideosModel = (*customVideosModel)(nil)
 
@@ -17,8 +20,8 @@ type (
 )
 
 // NewVideosModel returns a model for the database table.
-func NewVideosModel(conn sqlx.SqlConn) VideosModel {
+func NewVideosModel(conn sqlx.SqlConn, c cache.CacheConf) VideosModel {
 	return &customVideosModel{
-		defaultVideosModel: newVideosModel(conn),
+		defaultVideosModel: newVideosModel(conn, c),
 	}
 }
