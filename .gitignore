@@ -20,5 +20,5 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-service/user/api/etc/user.yaml
-service/user/rpc/etc/user.yaml
+.idea/
+default.etcd
