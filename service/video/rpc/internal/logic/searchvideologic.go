@@ -33,6 +33,7 @@ func (l *SearchVideoLogic) SearchVideo(in *video.DouyinSearchRequest) (*video.Do
 	if err != nil {
 		return nil, err
 	}
+
 	author := &video.User{
 		Id:              au.UserId,
 		Name:            au.Name,
