@@ -1,7 +1,7 @@
 create table videos
 (
     id             bigint unsigned auto_increment comment '自增主键'  primary key,
-    create_at      timestamp default CURRENT_TIMESTAMP not null,
+    created_at      timestamp default CURRENT_TIMESTAMP not null,
     deleted_at     datetime(3)                         null,
     update_time    datetime(3)                         not null,
     video_id       bigint                              not null,

@@ -34,6 +34,7 @@ type (
 		Update(ctx context.Context, data *Videos) error
 		Delete(ctx context.Context, id int64) error
 		GetFeedVideos(ctx context.Context, limit int, latestTime *int64) ([]*Videos, error)
+		GetVideosByAuthorID(ctx context.Context, authorid *int64) ([]*Videos, error)
 	}
 
 	defaultVideosModel struct {
@@ -69,8 +70,22 @@ func (m *defaultVideosModel) GetFeedVideos(ctx context.Context, limit int, lates
 		cur_time := int64(time.Now().UnixMilli())
 		latestTime = &cur_time
 	}
-	query := fmt.Sprintf("select %s from %s where `update_time` <= ? order by `update_time` desc limit %s", videosRows, m.table, limit)
+	query := fmt.Sprintf("select %s from %s where `update_time` <= ? order by %s desc %s", videosRows, m.table, "update_time", "limit 30")
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, *latestTime)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+
+}
+func (m *defaultVideosModel) GetVideosByAuthorID(ctx context.Context, authorid *int64) ([]*Videos, error) {
+	var resp []*Videos
+	query := fmt.Sprintf("select %s from %s where `author_id` = ? ", videosRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, *authorid)
 	switch err {
 	case nil:
 		return resp, nil

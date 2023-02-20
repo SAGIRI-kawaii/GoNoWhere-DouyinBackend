@@ -65,13 +65,13 @@ func (m *defaultFollowsModel) Delete(ctx context.Context, id int64) error {
 }
 func (m *defaultFollowsModel) JudgeFollow(ctx context.Context, followid int64, followeeid int64) (bool, error) {
 	var resp Follows
-	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `to_user_id` = ?", videosRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `to_user_id` = ?", followsRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, followid, followeeid)
 	switch err {
 	case nil:
 		return true, nil
 	case sqlc.ErrNotFound:
-		return false, ErrNotFound
+		return false, nil
 	default:
 		return false, err
 	}

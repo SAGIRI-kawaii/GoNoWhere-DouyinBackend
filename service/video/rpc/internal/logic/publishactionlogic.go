@@ -3,17 +3,15 @@ package logic
 import (
 	"context"
 	"database/sql"
+	"github.com/yitter/idgenerator-go/idgen"
+	"github.com/zeromicro/go-zero/core/logx"
 	"mini-douyin/common/errno"
 	"mini-douyin/common/jwtx"
 	"mini-douyin/common/upload"
 	"mini-douyin/service/video/model"
-	"strconv"
-	"time"
-
-	"github.com/yitter/idgenerator-go/idgen"
-	"github.com/zeromicro/go-zero/core/logx"
 	"mini-douyin/service/video/rpc/internal/svc"
 	"mini-douyin/service/video/rpc/video"
+	"strconv"
 )
 
 type PublishActionLogic struct {
@@ -49,9 +47,7 @@ func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest)
 		return nil, err
 	}
 	video_t := model.Videos{
-		CreateAt:      time.Now(),
 		DeletedAt:     sql.NullTime{},
-		UpdateTime:    time.Now(),
 		VideoId:       videoID,
 		AuthorId:      int64(userid),
 		Title:         in.Title,
