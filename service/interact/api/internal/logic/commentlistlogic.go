@@ -5,6 +5,7 @@ import (
 
 	"mini-douyin/service/interact/api/internal/svc"
 	"mini-douyin/service/interact/api/internal/types"
+	"mini-douyin/service/interact/rpc/interact"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,36 +27,41 @@ func NewCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Comme
 func (l *CommentListLogic) CommentList(req *types.Douyin_comment_list_request) (resp *types.Douyin_comment_list_response, err error) {
 	// todo: add your logic here and delete this line
 
-	// res, err := l.svcCtx.InteractRpc.CommentList(l.ctx, &interact.DouyinCommentListRequest{
-	// 	Token:       req.Token,
-	// 	VideoId:     int64(req.VideoId),
-	// 	ActionType:  int32(req.ActionType),
-	// 	CommentText: &req.CommentText,
-	// 	CommentId:   &s,
-	// })
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// if req.ActionType == 1 {
-	// 	return &types.Douyin_comment_action_response{
-	// 		StatusCode: int(res.StatusCode),
-	// 		StatusMsg:  *res.StatusMsg,
-	// 		Comment:    *res.Comment,
-	// 	}, nil
-	// }
+	res, err := l.svcCtx.InteractRpc.CommentList(l.ctx, &interact.DouyinCommentListRequest{
+		Token:   req.Token,
+		VideoId: int64(req.VideoId),
+	})
+	if err != nil {
+		return nil, err
+	}
 
-	// if req.ActionType == 2 {
-	// 	return &types.Douyin_comment_action_response{
-	// 		StatusCode: int(res.StatusCode),
-	// 		StatusMsg:  *res.StatusMsg,
-	// 		Comment:    *res.Comment,
-	// 	}, nil
-	// }
+	var CommentsList []*types.Douyin_comment = make([]*types.Douyin_comment, 0)
 
-	// var StatusMsg = "ActionType错误"
-	// return &types.Douyin_comment_action_response{
-	// 	StatusCode: int(res.StatusCode),
-	// 	StatusMsg:  StatusMsg,
-	// }, nil
-	return
+	for _, item := range res.CommentList {
+		CommentsList = append(CommentsList, &types.Douyin_comment{
+			Id: int(item.Id),
+			User: types.Douyin_user{
+				ID:               int(item.User.Id),
+				Name:             item.User.Name,
+				FollowCount:      int(*item.User.FollowCount),
+				FollowerCount:    int(*item.User.FollowerCount),
+				IsFollow:         item.User.IsFollow,
+				Avatar:           *item.User.Avatar,
+				Background_image: *item.User.BackgroundImage,
+				Signature:        *item.User.Signature,
+				TotalFavorited:   int(*item.User.TotalFavorited),
+				WorkCount:        int(*item.User.WorkCount),
+				FavoriteCount:    int(*item.User.FavoriteCount),
+			},
+			Content:    item.Content,
+			CreateDate: item.CreateDate,
+		})
+	}
+
+	var a string = "获取评论列表success"
+	return &types.Douyin_comment_list_response{
+		StatusCode:  int(res.StatusCode),
+		StatusMsg:   a,
+		CommentList: CommentsList,
+	}, nil
 }
