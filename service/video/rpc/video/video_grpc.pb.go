@@ -25,6 +25,7 @@ type VideoServiceClient interface {
 	PublishAction(ctx context.Context, in *DouyinPublishActionRequest, opts ...grpc.CallOption) (*DouyinPublishActionResponse, error)
 	PublishList(ctx context.Context, in *DouyinPublishListRequest, opts ...grpc.CallOption) (*DouyinPublishListResponse, error)
 	Feed(ctx context.Context, in *DouyinFeedRequest, opts ...grpc.CallOption) (*DouyinFeedResponse, error)
+	SearchVideo(ctx context.Context, in *DouyinSearchRequest, opts ...grpc.CallOption) (*DouyinSearchResponse, error)
 }
 
 type videoServiceClient struct {
@@ -62,6 +63,15 @@ func (c *videoServiceClient) Feed(ctx context.Context, in *DouyinFeedRequest, op
 	return out, nil
 }
 
+func (c *videoServiceClient) SearchVideo(ctx context.Context, in *DouyinSearchRequest, opts ...grpc.CallOption) (*DouyinSearchResponse, error) {
+	out := new(DouyinSearchResponse)
+	err := c.cc.Invoke(ctx, "/videoclinet.VideoService/search_video", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VideoServiceServer is the server API for VideoService service.
 // All implementations must embed UnimplementedVideoServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type VideoServiceServer interface {
 	PublishAction(context.Context, *DouyinPublishActionRequest) (*DouyinPublishActionResponse, error)
 	PublishList(context.Context, *DouyinPublishListRequest) (*DouyinPublishListResponse, error)
 	Feed(context.Context, *DouyinFeedRequest) (*DouyinFeedResponse, error)
+	SearchVideo(context.Context, *DouyinSearchRequest) (*DouyinSearchResponse, error)
 	mustEmbedUnimplementedVideoServiceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedVideoServiceServer) PublishList(context.Context, *DouyinPubli
 }
 func (UnimplementedVideoServiceServer) Feed(context.Context, *DouyinFeedRequest) (*DouyinFeedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Feed not implemented")
+}
+func (UnimplementedVideoServiceServer) SearchVideo(context.Context, *DouyinSearchRequest) (*DouyinSearchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchVideo not implemented")
 }
 func (UnimplementedVideoServiceServer) mustEmbedUnimplementedVideoServiceServer() {}
 
@@ -152,6 +166,24 @@ func _VideoService_Feed_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoService_SearchVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinSearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).SearchVideo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/videoclinet.VideoService/search_video",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).SearchVideo(ctx, req.(*DouyinSearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // VideoService_ServiceDesc is the grpc.ServiceDesc for VideoService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "feed",
 			Handler:    _VideoService_Feed_Handler,
+		},
+		{
+			MethodName: "search_video",
+			Handler:    _VideoService_SearchVideo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

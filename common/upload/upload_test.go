@@ -14,3 +14,10 @@ func TestUploadFile(t *testing.T) {
 	}
 	fmt.Println(url)
 }
+func TestDeleteVideo(t *testing.T) {
+	s, err := DeleteVideo(3214432254531)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(s)
+}

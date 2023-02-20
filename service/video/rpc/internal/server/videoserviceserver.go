@@ -36,3 +36,8 @@ func (s *VideoServiceServer) Feed(ctx context.Context, in *video.DouyinFeedReque
 	l := logic.NewFeedLogic(ctx, s.svcCtx)
 	return l.Feed(in)
 }
+
+func (s *VideoServiceServer) SearchVideo(ctx context.Context, in *video.DouyinSearchRequest) (*video.DouyinSearchResponse, error) {
+	l := logic.NewSearchVideoLogic(ctx, s.svcCtx)
+	return l.SearchVideo(in)
+}

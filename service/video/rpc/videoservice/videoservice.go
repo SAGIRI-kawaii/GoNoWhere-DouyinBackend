@@ -19,6 +19,8 @@ type (
 	DouyinPublishActionResponse = video.DouyinPublishActionResponse
 	DouyinPublishListRequest    = video.DouyinPublishListRequest
 	DouyinPublishListResponse   = video.DouyinPublishListResponse
+	DouyinSearchRequest         = video.DouyinSearchRequest
+	DouyinSearchResponse        = video.DouyinSearchResponse
 	User                        = video.User
 	Video                       = video.Video
 
@@ -26,6 +28,7 @@ type (
 		PublishAction(ctx context.Context, in *DouyinPublishActionRequest, opts ...grpc.CallOption) (*DouyinPublishActionResponse, error)
 		PublishList(ctx context.Context, in *DouyinPublishListRequest, opts ...grpc.CallOption) (*DouyinPublishListResponse, error)
 		Feed(ctx context.Context, in *DouyinFeedRequest, opts ...grpc.CallOption) (*DouyinFeedResponse, error)
+		SearchVideo(ctx context.Context, in *DouyinSearchRequest, opts ...grpc.CallOption) (*DouyinSearchResponse, error)
 	}
 
 	defaultVideoService struct {
@@ -52,4 +55,9 @@ func (m *defaultVideoService) PublishList(ctx context.Context, in *DouyinPublish
 func (m *defaultVideoService) Feed(ctx context.Context, in *DouyinFeedRequest, opts ...grpc.CallOption) (*DouyinFeedResponse, error) {
 	client := video.NewVideoServiceClient(m.cli.Conn())
 	return client.Feed(ctx, in, opts...)
+}
+
+func (m *defaultVideoService) SearchVideo(ctx context.Context, in *DouyinSearchRequest, opts ...grpc.CallOption) (*DouyinSearchResponse, error) {
+	client := video.NewVideoServiceClient(m.cli.Conn())
+	return client.SearchVideo(ctx, in, opts...)
 }
