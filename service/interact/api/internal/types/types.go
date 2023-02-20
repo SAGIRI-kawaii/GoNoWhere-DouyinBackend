@@ -43,9 +43,9 @@ type Douyin_comment_list_request struct {
 }
 
 type Douyin_comment_list_response struct {
-	StatusCode  int            `json:"status_code"`
-	StatusMsg   string         `json:"status_msg"`
-	CommentList Douyin_comment `json:"comment_list"`
+	StatusCode  int               `json:"status_code"`
+	StatusMsg   string            `json:"status_msg"`
+	CommentList []*Douyin_comment `json:"comment_list"`
 }
 
 type Douyin_video struct {

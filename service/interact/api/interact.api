@@ -44,9 +44,9 @@ type (
 	}
 
 	Douyin_comment_list_response {
-		StatusCode  int            `json:"status_code"`
-		StatusMsg   string         `json:"status_msg"`
-		CommentList Douyin_comment `json:"comment_list"`
+		StatusCode  int               `json:"status_code"`
+		StatusMsg   string            `json:"status_msg"`
+		CommentList []*Douyin_comment `json:"comment_list"`
 	}
 
 	Douyin_video {
