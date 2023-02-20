@@ -58,24 +58,11 @@ func (l *CommentListLogic) CommentList(in *interact.DouyinCommentListRequest) (*
 	if err != nil {
 		return nil, err
 	}
-	println(list)
-	println("1")
-	// type Users struct {
-	// 	Id            int64        `db:"id"` // 自增主键
-	// 	UserId        int64        `db:"user_id"`
-	// 	FollowCount   int64        `db:"follow_count"`
-	// 	FollowerCount int64        `db:"follower_count"`
-	// }
-	// type DouyinComment struct {
-	// 	Id         int64
-	// 	User       *interact.DouyinUser
-	// 	Content    string
-	// 	CreateDate time.Time
-	// }
 
 	// 定义最终返回的结果comment_list,
 	var CommentsList []*interact.Comment = make([]*interact.Comment, 0)
-	// 需要将FindList查到的Comment 填进去,再通过uid查user信息补充User字段
+
+	// todo：需要将FindList查到的Comment 填进去,再通过uid查user信息补充User字段
 	// a =model.Comments
 	for _, item := range list {
 		// 通过uid查user信息补充User字段
@@ -91,13 +78,13 @@ func (l *CommentListLogic) CommentList(in *interact.DouyinCommentListRequest) (*
 			Name:          res.User.Name,
 			FollowCount:   res.User.FollowCount,
 			FollowerCount: res.User.FollowerCount,
-			IsFollow:      res.User.IsFollow, //待查
-			// Avatar: 			res.User. ,
-			// BackgroundImage: 	res.User  ,
-			// Signature:			res.User. ,
-			// TotalFavorited:		res.User. ,
-			// WorkCount: 			res.User.,
-			// FavoriteCount: 		res.User.,
+			// IsFollow:        res.User.IsFollow, //待查
+			Avatar:          res.User.Avatar,
+			BackgroundImage: res.User.BackgroundImage,
+			Signature:       res.User.Signature,
+			TotalFavorited:  res.User.TotalFavorited,
+			WorkCount:       res.User.WorkCount,
+			FavoriteCount:   res.User.FavoriteCount,
 		}
 		var timetostring string = item.CreateAt.GoString()
 		// var CommentsList []*interact.DouyinComment =make([]*interact.DouyinComment, 0)
