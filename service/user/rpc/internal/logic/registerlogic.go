@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/cryptx"
+	"mini-douyin/common/jwtx"
 	"mini-douyin/service/user/model"
 	"mini-douyin/service/user/rpc/internal/svc"
 	"mini-douyin/service/user/rpc/user"
@@ -68,8 +69,13 @@ func (l *RegisterLogic) Register(in *user.DouyinUserRegisterRequest) (*user.Douy
 		if err != nil {
 			return nil, status.Error(100, "注册失败2")
 		}
+		token, err := jwtx.GenerateToken(newUser.Id)
+		if err != nil {
+			return nil, status.Error(100, "签发token失败")
+		}
 		return &user.DouyinUserRegisterResponse{
 			UserId: newUser.Id,
+			Token:  token,
 		}, nil
 	}
 
