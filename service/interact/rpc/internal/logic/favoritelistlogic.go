@@ -3,10 +3,8 @@ package logic
 import (
 	"context"
 
-	"mini-douyin/common/jwtx"
 	"mini-douyin/service/interact/rpc/interact"
 	"mini-douyin/service/interact/rpc/internal/svc"
-	"mini-douyin/service/video/rpc/video"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,95 +23,61 @@ func NewFavoriteListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Favo
 	}
 }
 
+// {
+//     "status_code": "string",
+//     "status_msg": "string",
+//     "video_list": [
+//         {
+//             "id": 0,
+//             "author": {
+//                 "id": 0,
+//                 "name": "string",
+//                 "follow_count": 0,
+//                 "follower_count": 0,
+//                 "is_follow": true,
+//                 "avatar": "string",
+//                 "background_image": "string",
+//                 "signature": "string",
+//                 "total_favorited": "string",
+//                 "work_count": 0,
+//                 "favorite_count": 0
+//             },
+//             "play_url": "string",
+//             "cover_url": "string",
+//             "favorite_count": 0,
+//             "comment_count": 0,
+//             "is_favorite": true,
+//             "title": "string"
+//         }
+//     ]
+// }
+
 func (l *FavoriteListLogic) FavoriteList(in *interact.DouyinFavoriteListRequest) (*interact.DouyinFavoriteListResponse, error) {
 	// todo: add your logic here and delete this line
+	// FindList方法查DB返回的list是 Favorite  类型
+	list, err := l.svcCtx.FavoriteModel.FindFavoritesListByUserId(l.ctx, in.UserId)
+	if err != nil {
+		return nil, err
+	}
 
 	// 定义最终返回的结果favorite_list,
 	var FavoritesList []*interact.Video = make([]*interact.Video, 0)
-	// todo：1. 通过 user_id 查询该用户点赞的videos列表
-	claims, err := jwtx.ParseToken(in.Token)
-	UserId := claims.UserID
-	if err != nil {
-		return nil, err
-	}
-	list, err := l.svcCtx.FavoriteModel.FindVideoListByUserId(l.ctx, UserId)
-	if err != nil {
-		return nil, err
-	}
-	println("以上OK")
-
-	// todo: 2. 遍历videos：通过video_id 查Video信息补充Video的除Author的字段    ：FindOneByVideoId(ctx context.Context, videoId int64) (*Videos, error)
 	for _, item := range list {
+		// todo: 通过video_id查Video信息补充Video的除Author的字段
+		// todo: 通过uid查User信息补充Author字段
 
-		c, err := l.svcCtx.VideoRpc.SearchVideo(l.ctx, &video.DouyinSearchRequest{
-			VideoId: item,
+		FavoritesList = append(FavoritesList, &interact.Video{
+			Id: item.VideoId, //被点赞的视频的video_id  ，还是自增id？
+			// Author:     ,
+			// PlayUrl:    ,
+			// CreateDate: timetostring,
+			// CoverUrl,
+			// FavoriteCount,
+			// CommentCount,
+			// IsFavorite    ,
+			// Title
 		})
-		var videoone = c.Video
-		if err != nil {
-			return nil, err
-		}
-		var author = &interact.User{
-			Id:              videoone.Author.Id,
-			Name:            videoone.Author.Name,
-			FollowCount:     videoone.Author.FollowCount,
-			FollowerCount:   videoone.Author.FollowerCount,
-			IsFollow:        videoone.Author.IsFollow, //待查
-			Avatar:          videoone.Author.Avatar,
-			BackgroundImage: videoone.Author.BackgroundImage,
-			Signature:       videoone.Author.Signature,
-			TotalFavorited:  videoone.Author.TotalFavorited,
-			WorkCount:       videoone.Author.WorkCount,
-			FavoriteCount:   videoone.Author.FavoriteCount,
-		}
-		var Favorites = &interact.Video{
-			Id:            videoone.Id, //被点赞的视频的video_id  ，还是自增id？
-			Author:        author,
-			PlayUrl:       videoone.PlayUrl,
-			CoverUrl:      videoone.CoverUrl,
-			FavoriteCount: videoone.FavoriteCount,
-			CommentCount:  videoone.CommentCount,
-			IsFavorite:    true,
-			Title:         videoone.Title,
-		}
-		FavoritesList = append(FavoritesList, Favorites)
 
-		// v, err := l.svcCtx.VideoModel.FindOneByVideoId(l.ctx, item)
-		// // videoone, err := l.svcCtx.VideoModel.FindOneByVideoId(l.ctx, item)
-		// if err != nil {
-		// 	return nil, err
-		// }
-
-		// println(v.AuthorId)
-		// // todo: 3. 通过video的author_id字段 查User信息补充videoAuthor字段
-		// res, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, videoone.AuthorId)
-		// if err != nil {
-		// 	return nil, err
-		// }
-
-		// var newComment = interact.User{
-		// 	Id:              res.UserId,
-		// 	Name:            res.Name,
-		// 	FollowCount:     &res.FollowCount,
-		// 	FollowerCount:   &res.FollowerCount,
-		// 	IsFollow:        false,              //待查
-		// 	Avatar:          &res.Avatar.String, //
-		// 	BackgroundImage: &res.BackgroundImage.String,
-		// 	Signature:       &res.Signature.String,
-		// 	TotalFavorited:  &res.TotalFavorited.Int64,
-		// 	WorkCount:       &res.WorkCount.Int64,
-		// 	FavoriteCount:   &res.FavoriteCount.Int64,
-		// }
-		// println(newComment.Avatar)
-		// FavoritesList = append(FavoritesList, &interact.Video{
-		// 	Id:            videoone.Id, //被点赞的视频的video_id  ，还是自增id？
-		// 	Author:        &newComment,
-		// 	PlayUrl:       videoone.PlayUrl,
-		// 	CoverUrl:      videoone.CoverUrl,
-		// 	FavoriteCount: videoone.FavoriteCount,
-		// 	CommentCount:  videoone.CommentCount,
-		// 	IsFavorite:    true,
-		// 	Title:         videoone.Title,
-		// })
 	}
 
 	// FavoriteList []*DouyinFavorite

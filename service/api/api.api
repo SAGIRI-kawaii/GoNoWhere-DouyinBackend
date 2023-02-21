@@ -1,0 +1,329 @@
+type (
+	Douyin_user_info {
+		ID              int64  `json:"id"`
+		Name            string `json:"name"`
+		FollowCount     int64  `json:"follow_count"`
+		FollowerCount   int64  `json:"follower_count"`
+		IsFollow        bool   `json:"is_follow"`
+		Avatar          string `json:"avatar"`
+		BackgroundImage string `json:"background_image"`
+		Signature       string `json:"signature"`
+		TotalFavorited  int64  `json:"total_favorited"`
+		WorkCount       int64  `json:"work_count"`
+		FavoriteCount   int64  `json:"favorite_count"`
+	}
+)
+
+// interact def
+
+type (
+	// 赞操作
+	Douyin_favorite_action_request {
+		Token      string `form:"token"`
+		VideoId    int64  `form:"video_id"`
+		ActionType int32  `form:"action_type"`
+	}
+	Douyin_favorite_action_response {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+	}
+
+	//喜欢列表
+	Douyin_favorite_list_request {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+
+	Douyin_favorite_list_response {
+		StatusCode int32          `json:"status_code"`
+		StatusMsg  string         `json:"status_msg"`
+		VideoList  []Douyin_video `json:"video_list"`
+	}
+
+	// 评论操作
+	Douyin_comment_action_request {
+		Token       string `form:"token"`
+		VideoId     int64  `form:"video_id"`
+		ActionType  int32  `form:"action_type"`
+		CommentText string `form:"comment_text"`
+		CommentId   int64  `form:"comment_id"`
+	}
+
+	Douyin_comment_action_response {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+		Comment    string `json:"comment"`
+	}
+
+	// 评论列表
+	Douyin_comment_list_request {
+		Token   string `form:"token"`
+		VideoId int    `form:"video_id"`
+	}
+
+	Douyin_comment_list_response {
+		StatusCode  int              `json:"status_code"`
+		StatusMsg   string           `json:"status_msg"`
+		CommentList []Douyin_comment `json:"comment_list"`
+	}
+
+	Douyin_video {
+		Id            int64            `json:"id"`
+		Author        Douyin_user_info `json:"author"`
+		PlayUrl       string           `json:"play_url"`
+		CoverUrl      string           `json:"cover_url"`
+		FavoriteCount int64            `json:"favorite_count"`
+		CommentCount  int64            `json:"comment_count"`
+		IsFavorite    bool             `json:"is_favorite"`
+		Title         string           `json:"title"`
+	}
+
+	Douyin_comment {
+		Id         int64            `json:"id"`
+		User       Douyin_user_info `json:"user"`
+		Content    string           `json:"content"`
+		CreateDate string           `json:"create_date"`
+	}
+)
+
+// message def
+type (
+	//聊天记录
+	Douyin_message_chat_request {
+		Token      string `form:"token"`
+		ToUserID   int64  `form:"to_user_id"`
+		PreMsgTime int64  `form:"pre_msg_time"`
+	}
+
+	Douyin_message_chat_response {
+		StatusCode  int32            `json:"status_code"`
+		StatusMsg   string           `json:"status_msg"`
+		MessageList []Douyin_message `json:"message_list"`
+	}
+	Douyin_message {
+		ID         int64  `json:"id"`
+		ToUserID   int64  `json:"to_user_id"`
+		FromUserID int64  `json:"from_user_id"`
+		Content    string `json:"content"`
+		CreateTime string `json:"create_time"`
+	}
+	// 聊天记录
+
+	// 发送消息
+	Douyin_message_action_request {
+		Token      string `form:"token"`
+		ToUserID   int64  `form:"to_user_id"`
+		ActionType int32  `form:"action_type"`
+		Content    string `form:"content"`
+	}
+	Douyin_message_action_response {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+	}
+	// 发送消息
+
+)
+
+// user def
+
+type (
+	// 用户登录
+	Douyin_user_login_request {
+		Username string `form:"username"`
+		Password string `form:"password"`
+	}
+
+	Douyin_user_login_response {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+		UserID     int64  `json:"user_id"`
+		Token      string `json:"token"`
+	}
+
+	// 用户注册
+	Douyin_user_register_request {
+		Username string `form:"username"`
+		Password string `form:"password"`
+	}
+	Douyin_user_register_response {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+		UserID     int64  `json:"user_id"`
+		Token      string `json:"token"`
+	}
+	// 用户注册
+
+	// 用户信息
+	Douyin_user_request {
+		UserID int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+
+	Douyin_user_response {
+		StatusCode int32            `json:"status_code"`
+		StatusMsg  string           `json:"status_msg"`
+		User       Douyin_user_info `json:"user"`
+	}
+)
+
+// video def
+
+type (
+	// 视频投稿
+	Duyin_publish_action_request {
+		Token string `form:"token"`
+		Data  []byte `form:"data"`
+		Title string `form:"title"`
+	}
+
+	Duyin_publish_action_response {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+	}
+
+	// 发布列表
+	Douyin_publish_list_request {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+	Douyin_publish_list_response {
+		StatusCode int32          `json:"status_code"`
+		StatusMsg  string         `json:"status_msg"`
+		VideoList  []Douyin_video `json:"video_list"`
+	}
+
+	// 视频流
+	Douyin_feed_request {
+		Token      string `form:"token"`
+		LatestTime int64  `form:"latest_time"`
+	}
+	Douyin_feed_response {
+		StatusCode int32          `json:"status_code"`
+		StatusMsg  string         `json:"status_msg"`
+		VideoList  []Douyin_video `json:"video_list"`
+		NextTime   int64          `json:"next_time"`
+	}
+)
+
+// social def
+
+type (
+	// 关注操作接口
+	Douyin_relation_action_request {
+		Token      string `form:"token"`
+		ToUserId   int64  `form:"to_user_id"`
+		ActionType int32  `form:"action_type"`
+	}
+
+	Douyin_relation_action_response {
+		StatusCode int32  `json:"status_code"`
+		StatusMsg  string `json:"status_msg"`
+	}
+
+	// 关注列表接口
+	Douyin_relation_follow_list_request {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+
+	Douyin_relation_follow_list_response {
+		StatusCode int32              `json:"status_code"`
+		StatusMsg  string             `json:"status_msg"`
+		UserList   []Douyin_user_info `json:"user_list"`
+	}
+
+	// 粉丝列表接口
+	Douyin_relation_follower_list_request {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+
+	Douyin_relation_follower_list_response {
+		StatusCode int32              `json:"status_code"`
+		StatusMsg  string             `json:"status_msg"`
+		UserList   []Douyin_user_info `json:"user_list"`
+	}
+
+	// 好友列表接口
+	Douyin_relation_friend_list_request {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+
+	Douyin_relation_friend_list_response {
+		StatusCode int32                     `json:"status_code"`
+		StatusMsg  string                    `json:"status_msg"`
+		UserList   []Douyin_friend_user_info `json:"user_list"`
+	}
+
+	Douyin_friend_user_info {
+		ID              int64  `json:"id"`
+		Name            string `json:"name"`
+		FollowCount     int64  `json:"follow_count"`
+		FollowerCount   int64  `json:"follower_count"`
+		IsFollow        bool   `json:"is_follow"`
+		Avatar          string `json:"avatar"`
+		BackgroundImage string `json:"background_image"`
+		Signature       string `json:"signature"`
+		TotalFavorited  int64  `json:"total_favorited"`
+		WorkCount       int64  `json:"work_count"`
+		FavoriteCount   int64  `json:"favorite_count"`
+		Message         string `json:"message"`
+		MessageType     int64  `json:"message_type"`
+	}
+)
+
+service API {
+	// interact
+	@handler FavoriteAction
+	post /douyin/favorite/action (Douyin_favorite_action_request) returns (Douyin_favorite_action_response)
+	
+	@handler FavoriteList
+	get /douyin/favorite/list (Douyin_favorite_list_request) returns (Douyin_favorite_list_response)
+	
+	@handler CommentAction
+	post /douyin/comment/action (Douyin_comment_action_request) returns (Douyin_comment_action_response)
+	
+	@handler CommentList
+	get /douyin/comment/list (Douyin_comment_list_request) returns (Douyin_comment_list_response)
+	
+	// message
+	@handler MessageAction
+	post /douyin/message/action (Douyin_message_action_request) returns (Douyin_message_action_response)
+	
+	@handler MessageChat
+	get /douyin/message/chat (Douyin_message_chat_request) returns (Douyin_message_chat_response)
+	
+	// user
+	@handler Login
+	post /douyin/user/login (Douyin_user_login_request) returns (Douyin_user_login_response)
+	
+	@handler Register
+	post /douyin/user/register (Douyin_user_register_request) returns (Douyin_user_register_response)
+	
+	@handler UserInfo
+	get /douyin/user (Douyin_user_request) returns (Douyin_user_response)
+	
+	// video
+	@handler Feed
+	get /douyin/feed (Douyin_feed_request) returns (Douyin_feed_response)
+	
+	@handler PublishList
+	get /douyin/publish/list (Douyin_publish_list_request) returns (Douyin_publish_list_response)
+	
+	@handler PublishAction
+	post /douyin/publish/action (Duyin_publish_action_request) returns (Duyin_publish_action_response)
+	
+	// follow
+	@handler RelationAction
+	post /douyin/relation/action (Douyin_relation_action_request) returns (Douyin_relation_action_response)
+	
+	@handler RelationFollowList
+	get /douyin/relation/follow/list (Douyin_relation_follow_list_request) returns (Douyin_relation_follow_list_response)
+	
+	@handler RelationFollowerList
+	get /douyin/relation/follower/list (Douyin_relation_follower_list_request) returns (Douyin_relation_follower_list_response)
+	
+	@handler RelationFriendList
+	get /douyin/relation/friend/list (Douyin_relation_friend_list_request) returns (Douyin_relation_friend_list_response)
+}
