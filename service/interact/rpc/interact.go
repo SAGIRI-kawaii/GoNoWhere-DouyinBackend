@@ -3,12 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"mini-douyin/common/log"
+
 	"mini-douyin/service/interact/rpc/interact"
 	"mini-douyin/service/interact/rpc/internal/config"
 	"mini-douyin/service/interact/rpc/internal/server"
 	"mini-douyin/service/interact/rpc/internal/svc"
-	"os"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -20,10 +19,6 @@ import (
 var configFile = flag.String("f", "etc/interact.yaml", "the config file")
 
 func main() {
-
-	idx, _ := os.Getwd()
-	log.SugarLogger.Info("info" + idx)
-
 	flag.Parse()
 
 	var c config.Config
