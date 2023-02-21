@@ -31,7 +31,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*Comments, error)
 		Update(ctx context.Context, data *Comments) error
 		Delete(ctx context.Context, id int64) error
-		FindList(ctx context.Context, id int64)  ([]*Comments, error)
+		FindList(ctx context.Context, id int64) ([]*Comments, error)
 	}
 
 	defaultCommentsModel struct {

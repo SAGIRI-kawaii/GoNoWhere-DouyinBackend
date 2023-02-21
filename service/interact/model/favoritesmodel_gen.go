@@ -31,9 +31,9 @@ type (
 		FindOne(ctx context.Context, id int64) (*Favorites, error)
 		Update(ctx context.Context, data *Favorites) error
 		Delete(ctx context.Context, id int64) error
-		DeleteByUserId2VideoId(ctx context.Context,UserId int64,VideoId int64) error
-		FindFavoritesListByUserId(ctx context.Context, UserId int64)  ([]*Favorites, error)
-		// FindAuthor(ctx context.Context, VideoId int64) (*Users, error) 
+		DeleteByUserId2VideoId(ctx context.Context, UserId int64, VideoId int64) error
+		FindFavoritesListByUserId(ctx context.Context, UserId int64) ([]*Favorites, error)
+		// FindAuthor(ctx context.Context, VideoId int64) (*Users, error)
 	}
 
 	defaultFavoritesModel struct {
@@ -42,10 +42,10 @@ type (
 	}
 
 	Favorites struct {
-		Id       int64         `db:"id"`        // 自增主键
-		CreateAt time.Time     `db:"create_at"` // 创建时间
-		UserId   int64 `db:"user_id"`   // 点赞用户ID
-		VideoId  int64         `db:"video_id"`  // 被点赞视频ID
+		Id       int64     `db:"id"`        // 自增主键
+		CreateAt time.Time `db:"create_at"` // 创建时间
+		UserId   int64     `db:"user_id"`   // 点赞用户ID
+		VideoId  int64     `db:"video_id"`  // 被点赞视频ID
 	}
 )
 
@@ -113,16 +113,14 @@ func (m *defaultFavoritesModel) tableName() string {
 	return m.table
 }
 
-
-func (m *defaultFavoritesModel) DeleteByUserId2VideoId(ctx context.Context, UserId int64,VideoId int64) error {
-	favoritesIdKey := fmt.Sprintf("%s%v%v", cacheFavoritesIdPrefix, UserId ,VideoId)
+func (m *defaultFavoritesModel) DeleteByUserId2VideoId(ctx context.Context, UserId int64, VideoId int64) error {
+	favoritesIdKey := fmt.Sprintf("%s%v%v", cacheFavoritesIdPrefix, UserId, VideoId)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `user_id` = ? and `video_id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, UserId, VideoId)
 	}, favoritesIdKey)
 	return err
 }
-
 
 func (m *defaultFavoritesModel) FindFavoritesListByUserId(ctx context.Context, UserId int64) ([]*Favorites, error) {
 	favoritesIdKey := fmt.Sprintf("%s%v", cacheFavoritesIdPrefix, UserId)
@@ -142,7 +140,6 @@ func (m *defaultFavoritesModel) FindFavoritesListByUserId(ctx context.Context, U
 	}
 }
 
-
 // func (m *defaultFavoritesModel) FindAuthor(ctx context.Context, VideoId int64) (*Users, error) {
 // 	favoritesIdKey := fmt.Sprintf("%s%v", cacheFavoritesIdPrefix, VideoId)
 // 	// var resp  Favorites
@@ -152,7 +149,7 @@ func (m *defaultFavoritesModel) FindFavoritesListByUserId(ctx context.Context, U
 // 		query1 := fmt.Sprintf("select users.name from videos join users on users.user_id == videos.user_id  where video_id =?", favoritesRows)
 // 		println(query1)
 // 		return conn.QueryRowsCtx(ctx, v, query1, VideoId)
-		
+
 // 	})
 // 	switch err {
 // 	case nil:

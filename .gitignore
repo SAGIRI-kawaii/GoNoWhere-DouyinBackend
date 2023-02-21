@@ -22,3 +22,6 @@
 # vendor/
 .idea/
 default.etcd
+default.etcd/member/wal/0000000000000000-0000000000000000.wal
+default.etcd/member/snap/db
+.idea/modules.xml

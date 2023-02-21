@@ -1,17 +1,17 @@
 syntax = "proto3";
 package videoclinet;
 
-option go_package="./video";
+option go_package = "./video";
 //视频投稿
 message douyin_publish_action_request {
-   string token = 1; // 用户鉴权token
-   bytes data = 2; // 视频数据
-   string title = 3; // 视频标题
+  string token = 1; // 用户鉴权token
+  bytes data = 2; // 视频数据
+  string title = 3; // 视频标题
 }
 
 message douyin_publish_action_response {
-   int32 status_code = 1; // 状态码，0-成功，其他值-失败
-   optional string status_msg = 2; // 返回状态描述
+  int32 status_code = 1; // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
 }
 //视频投稿
 
@@ -31,13 +31,13 @@ message douyin_publish_list_response {
 //发布列表
 
 message douyin_search_request {
-  int64 video_id=1;
-  string token=2;
+  int64 video_id = 1;
+  string token = 2;
 }
 message douyin_search_response {
   int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
-  Video video=3;
+  Video video = 3;
 }
 //视频流
 message douyin_feed_request {
@@ -46,7 +46,7 @@ message douyin_feed_request {
 }
 
 message douyin_feed_response {
- int32 status_code = 1; // 状态码，0-成功，其他值-失败
+  int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
   repeated Video video_list = 3; // 视频列表
   optional int64 next_time = 4; // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time

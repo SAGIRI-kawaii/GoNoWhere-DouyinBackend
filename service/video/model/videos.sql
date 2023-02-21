@@ -1,9 +1,9 @@
 create table videos
 (
-    id             bigint unsigned auto_increment comment '自增主键'  primary key,
-    created_at      timestamp default CURRENT_TIMESTAMP not null,
-    deleted_at     datetime(3)                         null,
-    update_time    datetime(3)                         not null,
+    id             bigint unsigned auto_increment comment '自增主键' primary key,
+    created_at     timestamp default CURRENT_TIMESTAMP not null,
+    deleted_at     datetime(3) null,
+    update_time    datetime(3) not null,
     video_id       bigint                              not null,
     author_id      bigint                              not null,
     title          varchar(50)                         not null,
@@ -14,8 +14,7 @@ create table videos
     constraint video_id
         unique (video_id),
     primary key (id)
-)
-    collate = utf8mb4_general_ci;
+) collate = utf8mb4_general_ci;
 
 
 
