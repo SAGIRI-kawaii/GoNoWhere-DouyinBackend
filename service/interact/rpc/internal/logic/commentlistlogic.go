@@ -24,32 +24,6 @@ func NewCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Comme
 	}
 }
 
-/*
-	{
-		"status_code": 0,
-		"status_msg": "string",
-		"comment_list": [
-			{
-				"id": 0,
-				"user": {
-					"id": 0,
-					"name": "string",
-					"follow_count": 0,
-					"follower_count": 0,
-					"is_follow": true,
-					"avatar": "string",
-					"background_image": "string",
-					"signature": "string",
-					"total_favorited": "string",
-					"work_count": 0,
-					"favorite_count": 0
-				},
-				"content": "string",
-				"create_date": "string"
-			}
-		]
-	}
-*/
 func (l *CommentListLogic) CommentList(in *interact.DouyinCommentListRequest) (*interact.DouyinCommentListResponse, error) {
 	// todo: add your logic here and delete this line
 
@@ -67,18 +41,19 @@ func (l *CommentListLogic) CommentList(in *interact.DouyinCommentListRequest) (*
 	for _, item := range list {
 		// 通过uid查user信息补充User字段
 		res, err := l.svcCtx.UserRpc.UserInfo(l.ctx, &userclient.DouyinUserRequest{
+			Token:  in.Token,
 			UserId: item.UserId,
 		})
 		if err != nil {
 			return nil, err //用户查询失败时打印
 		}
-		println(res.User.Name)
+		// println(res.User.Name)
 		var newComment = interact.User{
-			Id:            res.User.Id,
-			Name:          res.User.Name,
-			FollowCount:   res.User.FollowCount,
-			FollowerCount: res.User.FollowerCount,
-			// IsFollow:        res.User.IsFollow, //待查
+			Id:              res.User.Id,
+			Name:            res.User.Name,
+			FollowCount:     res.User.FollowCount,
+			FollowerCount:   res.User.FollowerCount,
+			IsFollow:        res.User.IsFollow, //待查
 			Avatar:          res.User.Avatar,
 			BackgroundImage: res.User.BackgroundImage,
 			Signature:       res.User.Signature,

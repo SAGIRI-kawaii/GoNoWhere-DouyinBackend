@@ -2,15 +2,15 @@ type (
 	Douyin_user_info {
 		ID              int64  `json:"id"`
 		Name            string `json:"name"`
-		FollowCount     int64  `json:"follow_count"`
-		FollowerCount   int64  `json:"follower_count"`
+		FollowCount     int64  `json:"follow_count,optional"`
+		FollowerCount   int64  `json:"follower_count,optional"`
 		IsFollow        bool   `json:"is_follow"`
-		Avatar          string `json:"avatar"`
-		BackgroundImage string `json:"background_image"`
-		Signature       string `json:"signature"`
-		TotalFavorited  int64  `json:"total_favorited"`
-		WorkCount       int64  `json:"work_count"`
-		FavoriteCount   int64  `json:"favorite_count"`
+		Avatar          string `json:"avatar,optional"`
+		BackgroundImage string `json:"background_image,optional"`
+		Signature       string `json:"signature,optional"`
+		TotalFavorited  int64  `json:"total_favorited,optional"`
+		WorkCount       int64  `json:"work_count,optional"`
+		FavoriteCount   int64  `json:"favorite_count,optional"`
 	}
 )
 
@@ -25,7 +25,7 @@ type (
 	}
 	Douyin_favorite_action_response {
 		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusMsg  string `json:"status_msg,optional"`
 	}
 
 	//喜欢列表
@@ -36,7 +36,7 @@ type (
 
 	Douyin_favorite_list_response {
 		StatusCode int32          `json:"status_code"`
-		StatusMsg  string         `json:"status_msg"`
+		StatusMsg  string         `json:"status_msg,optional"`
 		VideoList  []Douyin_video `json:"video_list"`
 	}
 
@@ -45,14 +45,14 @@ type (
 		Token       string `form:"token"`
 		VideoId     int64  `form:"video_id"`
 		ActionType  int32  `form:"action_type"`
-		CommentText string `form:"comment_text"`
-		CommentId   int64  `form:"comment_id"`
+		CommentText string `form:"comment_text,optional"`
+		CommentId   int64  `form:"comment_id,optional"`
 	}
 
 	Douyin_comment_action_response {
 		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
-		Comment    string `json:"comment"`
+		StatusMsg  string `json:"status_msg,optional"`
+		Comment    string `json:"comment,optional"`
 	}
 
 	// 评论列表
@@ -63,7 +63,7 @@ type (
 
 	Douyin_comment_list_response {
 		StatusCode  int              `json:"status_code"`
-		StatusMsg   string           `json:"status_msg"`
+		StatusMsg   string           `json:"status_msg,optional"`
 		CommentList []Douyin_comment `json:"comment_list"`
 	}
 
@@ -97,7 +97,7 @@ type (
 
 	Douyin_message_chat_response {
 		StatusCode  int32            `json:"status_code"`
-		StatusMsg   string           `json:"status_msg"`
+		StatusMsg   string           `json:"status_msg,optional"`
 		MessageList []Douyin_message `json:"message_list"`
 	}
 	Douyin_message {
@@ -105,7 +105,7 @@ type (
 		ToUserID   int64  `json:"to_user_id"`
 		FromUserID int64  `json:"from_user_id"`
 		Content    string `json:"content"`
-		CreateTime string `json:"create_time"`
+		CreateTime string `json:"create_time,optional"`
 	}
 	// 聊天记录
 
@@ -118,7 +118,7 @@ type (
 	}
 	Douyin_message_action_response {
 		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusMsg  string `json:"status_msg,optional"`
 	}
 	// 发送消息
 
@@ -135,7 +135,7 @@ type (
 
 	Douyin_user_login_response {
 		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusMsg  string `json:"status_msg,optional"`
 		UserID     int64  `json:"user_id"`
 		Token      string `json:"token"`
 	}
@@ -147,7 +147,7 @@ type (
 	}
 	Douyin_user_register_response {
 		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusMsg  string `json:"status_msg,optional"`
 		UserID     int64  `json:"user_id"`
 		Token      string `json:"token"`
 	}
@@ -161,7 +161,7 @@ type (
 
 	Douyin_user_response {
 		StatusCode int32            `json:"status_code"`
-		StatusMsg  string           `json:"status_msg"`
+		StatusMsg  string           `json:"status_msg,optional"`
 		User       Douyin_user_info `json:"user"`
 	}
 )
@@ -178,7 +178,7 @@ type (
 
 	Duyin_publish_action_response {
 		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusMsg  string `json:"status_msg,optional"`
 	}
 
 	// 发布列表
@@ -194,14 +194,14 @@ type (
 
 	// 视频流
 	Douyin_feed_request {
-		Token      string `form:"token"`
-		LatestTime int64  `form:"latest_time"`
+		Token      string `form:"token,optional"`
+		LatestTime int64  `form:"latest_time,optional"`
 	}
 	Douyin_feed_response {
 		StatusCode int32          `json:"status_code"`
-		StatusMsg  string         `json:"status_msg"`
+		StatusMsg  string         `json:"status_msg,optional"`
 		VideoList  []Douyin_video `json:"video_list"`
-		NextTime   int64          `json:"next_time"`
+		NextTime   int64          `json:"next_time,optional"`
 	}
 )
 
@@ -217,7 +217,7 @@ type (
 
 	Douyin_relation_action_response {
 		StatusCode int32  `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
+		StatusMsg  string `json:"status_msg,optional"`
 	}
 
 	// 关注列表接口
@@ -228,7 +228,7 @@ type (
 
 	Douyin_relation_follow_list_response {
 		StatusCode int32              `json:"status_code"`
-		StatusMsg  string             `json:"status_msg"`
+		StatusMsg  string             `json:"status_msg,optional"`
 		UserList   []Douyin_user_info `json:"user_list"`
 	}
 
@@ -240,7 +240,7 @@ type (
 
 	Douyin_relation_follower_list_response {
 		StatusCode int32              `json:"status_code"`
-		StatusMsg  string             `json:"status_msg"`
+		StatusMsg  string             `json:"status_msg,optional"`
 		UserList   []Douyin_user_info `json:"user_list"`
 	}
 
@@ -252,23 +252,23 @@ type (
 
 	Douyin_relation_friend_list_response {
 		StatusCode int32                     `json:"status_code"`
-		StatusMsg  string                    `json:"status_msg"`
+		StatusMsg  string                    `json:"status_msg,optional"`
 		UserList   []Douyin_friend_user_info `json:"user_list"`
 	}
 
 	Douyin_friend_user_info {
 		ID              int64  `json:"id"`
 		Name            string `json:"name"`
-		FollowCount     int64  `json:"follow_count"`
-		FollowerCount   int64  `json:"follower_count"`
+		FollowCount     int64  `json:"follow_count,optional"`
+		FollowerCount   int64  `json:"follower_count,optional"`
 		IsFollow        bool   `json:"is_follow"`
-		Avatar          string `json:"avatar"`
-		BackgroundImage string `json:"background_image"`
-		Signature       string `json:"signature"`
-		TotalFavorited  int64  `json:"total_favorited"`
-		WorkCount       int64  `json:"work_count"`
-		FavoriteCount   int64  `json:"favorite_count"`
-		Message         string `json:"message"`
+		Avatar          string `json:"avatar,optional"`
+		BackgroundImage string `json:"background_image,optional"`
+		Signature       string `json:"signature,optional"`
+		TotalFavorited  int64  `json:"total_favorited,optional"`
+		WorkCount       int64  `json:"work_count,optional"`
+		FavoriteCount   int64  `json:"favorite_count,optional"`
+		Message         string `json:"message,optional"`
 		MessageType     int64  `json:"message_type"`
 	}
 )
