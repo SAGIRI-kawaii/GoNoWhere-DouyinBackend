@@ -13,4 +13,5 @@ type Config struct {
 	CacheRedis cache.ClusterConf
 	Salt       string //?????????????
 	UserRpc    zrpc.RpcClientConf
+	VideoRpc   zrpc.RpcClientConf
 }

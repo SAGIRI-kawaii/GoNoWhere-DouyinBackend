@@ -1,4 +1,4 @@
-package model
+package comments
 
 import (
 	"github.com/zeromicro/go-zero/core/stores/cache"

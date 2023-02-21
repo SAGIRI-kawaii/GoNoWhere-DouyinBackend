@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 
 	"mini-douyin/service/interact/api/internal/config"
 	"mini-douyin/service/interact/api/internal/handler"
@@ -16,7 +15,6 @@ import (
 var configFile = flag.String("f", "etc/interact.yaml", "the config file")
 
 func main() {
-	fmt.Println(os.Getwd())
 	flag.Parse()
 
 	var c config.Config

@@ -49,7 +49,7 @@ func (l *CommentActionLogic) CommentAction(req *types.Douyin_comment_action_requ
 		return &types.Douyin_comment_action_response{
 			StatusCode: int(res.StatusCode),
 			StatusMsg:  *res.StatusMsg,
-			Comment:    *res.Comment,
+			// Comment:    *res.Comment,
 		}, nil
 	}
 
