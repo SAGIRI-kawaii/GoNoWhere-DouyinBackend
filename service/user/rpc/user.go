@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-
 	"mini-douyin/service/user/rpc/internal/config"
 	"mini-douyin/service/user/rpc/internal/server"
 	"mini-douyin/service/user/rpc/internal/svc"

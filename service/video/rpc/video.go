@@ -1,28 +1,24 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-
-	"mini-douyin/service/video/rpc/internal/config"
-	"mini-douyin/service/video/rpc/internal/server"
-	"mini-douyin/service/video/rpc/internal/svc"
-	"mini-douyin/service/video/rpc/video"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"mini-douyin/service/video/rpc/internal/config"
+	"mini-douyin/service/video/rpc/internal/server"
+	"mini-douyin/service/video/rpc/internal/svc"
+	"mini-douyin/service/video/rpc/video"
 )
 
-var configFile = flag.String("f", "etc/video.yaml", "the config file")
+//var configFile = flag.String("f", "etc/video.yaml", "the config file")
 
 func main() {
-	flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	conf.MustLoad("common/config/rpc/video.yaml", &c)
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
