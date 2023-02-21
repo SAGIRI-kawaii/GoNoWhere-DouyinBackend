@@ -20,7 +20,7 @@ type Douyin_favorite_list_request struct {
 type Douyin_favorite_list_response struct {
 	StatusCode int          `json:"status_code"`
 	StatusMsg  string       `json:"status_msg"`
-	VideoList  Douyin_video `json:"video_list"`
+	VideoList  []*Douyin_video `json:"video_list"`
 }
 
 type Douyin_comment_action_request struct {

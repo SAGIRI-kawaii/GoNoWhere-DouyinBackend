@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
-	"strconv"
 
-	"mini-douyin/service/interact/model"
+	"mini-douyin/common/jwtx"
+	model "mini-douyin/service/interact/model/comments"
 	"mini-douyin/service/interact/rpc/interact"
 	"mini-douyin/service/interact/rpc/internal/svc"
 
@@ -31,7 +31,8 @@ func (l *CommentActionLogic) CommentAction(in *interact.DouyinCommentActionReque
 
 	// UserId := in.Token
 	// String转int64
-	UserId, err := strconv.ParseInt(in.Token, 10, 0)
+	claims, err := jwtx.ParseToken(in.Token)
+	UserId := claims.UserID
 	if err != nil {
 		return nil, err
 	}

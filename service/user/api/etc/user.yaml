@@ -6,8 +6,8 @@ Mysql:
   DataSource: where:where@tcp(8.142.30.177:3306)/gonowhere?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 
 CacheRedis:
-  - Host: 127.0.0.1:6379
-    Pass:
+  - Host: 8.142.30.177:6379
+    Pass: ws1234++--
     Type: node
 
 Auth:

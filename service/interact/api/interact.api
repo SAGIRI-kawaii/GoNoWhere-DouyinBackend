@@ -19,7 +19,7 @@ type (
 	Douyin_favorite_list_response {
 		StatusCode int          `json:"status_code"`
 		StatusMsg  string       `json:"status_msg"`
-		VideoList  Douyin_video `json:"video_list"`
+		VideoList  []*Douyin_video `json:"video_list"`
 	}
 
 	// 评论操作
