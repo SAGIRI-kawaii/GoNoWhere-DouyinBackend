@@ -30,11 +30,11 @@ type (
         StatusCode int `json:"status_code"`
         StatusMsg string `json:"status_msg"`
     }
-        // 发送消息
+    // 发送消息
 
 )
 
-service Message{
+service Message {
     @handler Action
     post /douyin/message/action (Douyin_message_action_request) returns (Douyin_message_action_response)
 
