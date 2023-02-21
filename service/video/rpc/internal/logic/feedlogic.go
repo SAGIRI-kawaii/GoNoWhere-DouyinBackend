@@ -26,7 +26,6 @@ func NewFeedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedLogic {
 }
 
 func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse, error) {
-	// todo: add your logic here and delete this line
 	var vs []*video.Video
 	claims, err := jwtx.ParseToken(*in.Token)
 	userid := claims.UserID
