@@ -31,8 +31,6 @@ func NewPublishActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pub
 }
 
 func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest) (*video.DouyinPublishActionResponse, error) {
-	// todo: add your logic here and delete this line
-
 	claims, err := jwtx.ParseToken(in.Token)
 	userid := claims.UserID
 	if err != nil {

@@ -28,14 +28,6 @@ func NewPublishListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publi
 }
 
 func (l *PublishListLogic) PublishList(in *video.DouyinPublishListRequest) (*video.DouyinPublishListResponse, error) {
-	// todo: add your logic here and delete this line
-	//token, err := strconv.ParseInt(in.Token, 10, 64)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//userid, err := jwtx.ParseToken2Uid("a", uint64(token))
-	//if err != nil {
-	//
 	var vs []*video.Video
 	videos, err := l.svcCtx.VideoModel.GetVideosByAuthorID(l.ctx, &in.UserId)
 	if err != nil {

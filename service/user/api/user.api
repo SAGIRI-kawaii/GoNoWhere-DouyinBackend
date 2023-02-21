@@ -1,62 +1,62 @@
 type (
-	// 用户登录
-	Douyin_user_login_request {
-		Username string `form:"username"`
-		Password string `form:"password"`
-	}
+    // 用户登录
+    Douyin_user_login_request {
+        Username string `form:"username"`
+        Password string `form:"password"`
+    }
 
-	Douyin_user_login_response {
-		StatusCode int    `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
-		UserID     int    `json:"user_id"`
-		Token      string `json:"token"`
-	}
-	// 用户登录
+    Douyin_user_login_response {
+        StatusCode int `json:"status_code"`
+        StatusMsg string `json:"status_msg"`
+        UserID int `json:"user_id"`
+        Token string `json:"token"`
+    }
+        // 用户登录
 
-	// 用户注册
-	Douyin_user_register_request {
-		Username string `form:"username"`
-		Password string `form:"password"`
-	}
-	Douyin_user_register_response {
-		StatusCode int    `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
-		UserID     int    `json:"user_id"`
-		Token      string `json:"token"`
-	}
-	// 用户注册
+        // 用户注册
+    Douyin_user_register_request {
+        Username string `form:"username"`
+        Password string `form:"password"`
+    }
+    Douyin_user_register_response {
+        StatusCode int `json:"status_code"`
+        StatusMsg string `json:"status_msg"`
+        UserID int `json:"user_id"`
+        Token string `json:"token"`
+    }
+        // 用户注册
 
-	// 用户信息
-	Douyin_user_request {
-		UserID int    `form:"user_id"`
-		Token  string `form:"token"`
-	}
+        // 用户信息
+    Douyin_user_request {
+        UserID int `form:"user_id"`
+        Token string `form:"token"`
+    }
 
-	Douyin_user_response {
-		StatusCode int              `json:"status_code"`
-		StatusMsg  string           `json:"status_msg"`
-		User       Douyin_user_info `json:"user"`
-	}
+    Douyin_user_response {
+        StatusCode int `json:"status_code"`
+        StatusMsg string `json:"status_msg"`
+        User Douyin_user_info `json:"user"`
+    }
 
-	Douyin_user_info {
-		ID            int    `json:"id"`
-		Name          string `json:"name"`
-		FollowCount   int    `json:"follow_count"`
-		FollowerCount int    `json:"follower_count"`
-		IsFollow      bool   `json:"is_follow"`
-	}
-	// 用户信息
+    Douyin_user_info {
+        ID int `json:"id"`
+        Name string `json:"name"`
+        FollowCount int `json:"follow_count"`
+        FollowerCount int `json:"follower_count"`
+        IsFollow bool `json:"is_follow"`
+    }
+    // 用户信息
 )
 
 service User {
-	@handler Login
-	post /douyin/user/login (Douyin_user_login_request) returns (Douyin_user_login_response)
-	
-	@handler Register
-	post /douyin/user/register (Douyin_user_register_request) returns (Douyin_user_register_response)
+    @handler Login
+    post /douyin/user/login (Douyin_user_login_request) returns (Douyin_user_login_response)
+
+    @handler Register
+    post /douyin/user/register (Douyin_user_register_request) returns (Douyin_user_register_response)
 }
 
 service User {
-	@handler UserInfo
-	get /douyin/user (Douyin_user_request)returns (Douyin_user_response)
+    @handler UserInfo
+    get /douyin/user (Douyin_user_request) returns (Douyin_user_response)
 }

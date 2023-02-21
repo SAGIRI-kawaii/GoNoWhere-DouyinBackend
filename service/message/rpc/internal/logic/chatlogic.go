@@ -26,13 +26,13 @@ func NewChatLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ChatLogic {
 
 func (l *ChatLogic) Chat(in *message.DouyinMessageChatRequest) (*message.DouyinMessageChatResponse, error) {
 	// todo: add your logic here and delete this line
-	res1, err := jwtx.ParseToken2Uid("a", in.Token)
-	if err != nil || res1 == 0 {
+	res1, err := jwtx.ParseToken(in.Token)
+	if err != nil {
 		return nil, status.Error(100, "Token解析失败")
 	}
 	println(time.Unix(in.PreMsgTime, 0).Format("2006-01-02 03:04:05"))
 	tm := time.Unix(in.PreMsgTime, 0)
-	messages, err := l.svcCtx.MessageModel.FindLatestMsg(l.ctx, res1, tm.Format("2006-01-02 03:04:05"))
+	messages, err := l.svcCtx.MessageModel.FindLatestMsg(l.ctx, res1.UserID, tm.Format("2006-01-02 03:04:05"))
 	if err != nil {
 		return nil, status.Error(100, "消息列表获取失败")
 	}

@@ -30,12 +30,12 @@ func NewActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ActionLogi
 func (l *ActionLogic) Action(in *message.DouyinRelationActionRequest) (*message.DouyinRelationActionResponse, error) {
 	// todo: add your logic here and delete this line
 	if in.ActionType == 1 {
-		res1, err := jwtx.ParseToken2Uid("a", in.Token)
-		if err != nil || res1 == 0 {
+		res1, err := jwtx.ParseToken(in.Token)
+		if err != nil {
 			return nil, status.Error(100, "Token解析失败")
 		}
 		newMessage := messages.Messages{
-			UserId:   sql.NullInt64{Valid: true, Int64: res1},
+			UserId:   sql.NullInt64{Valid: true, Int64: res1.UserID},
 			ToUserId: sql.NullInt64{Valid: true, Int64: in.ToUserId},
 			Content:  sql.NullString{Valid: true, String: in.Content},
 			CreateAt: sql.NullTime{Valid: true, Time: time.Now()},
