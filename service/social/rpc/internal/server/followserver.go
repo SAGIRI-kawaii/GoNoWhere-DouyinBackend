@@ -36,3 +36,8 @@ func (s *FollowServer) FollowerList(ctx context.Context, in *follow.DouyinRelati
 	l := logic.NewFollowerListLogic(ctx, s.svcCtx)
 	return l.FollowerList(in)
 }
+
+func (s *FollowServer) FriendList(ctx context.Context, in *follow.DouyinRelationFriendListRequest) (*follow.DouyinRelationFriendListResponse, error) {
+	l := logic.NewFriendListLogic(ctx, s.svcCtx)
+	return l.FriendList(in)
+}

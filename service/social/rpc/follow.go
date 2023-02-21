@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"mini-douyin/common/dal"
 
 	"mini-douyin/service/social/rpc/follow"
 	"mini-douyin/service/social/rpc/internal/config"
@@ -22,7 +21,7 @@ var configFile = flag.String("f", "etc/follow.yaml", "the config file")
 func main() {
 	//dal.InitDB()
 	flag.Parse()
-	dal.InitDB()
+
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)

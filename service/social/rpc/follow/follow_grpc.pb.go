@@ -25,6 +25,7 @@ type FollowClient interface {
 	FollowAction(ctx context.Context, in *DouyinRelationActionRequest, opts ...grpc.CallOption) (*DouyinRelationActionResponse, error)
 	FollowList(ctx context.Context, in *DouyinRelationFollowListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowListResponse, error)
 	FollowerList(ctx context.Context, in *DouyinRelationFollowerListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowerListResponse, error)
+	FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error)
 }
 
 type followClient struct {
@@ -62,6 +63,15 @@ func (c *followClient) FollowerList(ctx context.Context, in *DouyinRelationFollo
 	return out, nil
 }
 
+func (c *followClient) FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error) {
+	out := new(DouyinRelationFriendListResponse)
+	err := c.cc.Invoke(ctx, "/followclient.Follow/FriendList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FollowServer is the server API for Follow service.
 // All implementations must embed UnimplementedFollowServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type FollowServer interface {
 	FollowAction(context.Context, *DouyinRelationActionRequest) (*DouyinRelationActionResponse, error)
 	FollowList(context.Context, *DouyinRelationFollowListRequest) (*DouyinRelationFollowListResponse, error)
 	FollowerList(context.Context, *DouyinRelationFollowerListRequest) (*DouyinRelationFollowerListResponse, error)
+	FriendList(context.Context, *DouyinRelationFriendListRequest) (*DouyinRelationFriendListResponse, error)
 	mustEmbedUnimplementedFollowServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedFollowServer) FollowList(context.Context, *DouyinRelationFoll
 }
 func (UnimplementedFollowServer) FollowerList(context.Context, *DouyinRelationFollowerListRequest) (*DouyinRelationFollowerListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FollowerList not implemented")
+}
+func (UnimplementedFollowServer) FriendList(context.Context, *DouyinRelationFriendListRequest) (*DouyinRelationFriendListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FriendList not implemented")
 }
 func (UnimplementedFollowServer) mustEmbedUnimplementedFollowServer() {}
 
@@ -152,6 +166,24 @@ func _Follow_FollowerList_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Follow_FriendList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinRelationFriendListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FollowServer).FriendList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/followclient.Follow/FriendList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FollowServer).FriendList(ctx, req.(*DouyinRelationFriendListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Follow_ServiceDesc is the grpc.ServiceDesc for Follow service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var Follow_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FollowerList",
 			Handler:    _Follow_FollowerList_Handler,
+		},
+		{
+			MethodName: "FriendList",
+			Handler:    _Follow_FriendList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

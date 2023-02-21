@@ -31,6 +31,7 @@ type (
 		Update(ctx context.Context, data *Messages) error
 		Delete(ctx context.Context, id int64) error
 		FindLatestMsg(ctx context.Context, uid int64, preMsgTime string) (*[]Messages, error)
+		FindOneLatestMsgByUid(ctx context.Context, uid int64, touserid int64) (*Messages, error)
 	}
 
 	defaultMessagesModel struct {
@@ -78,6 +79,21 @@ func (m *defaultMessagesModel) FindOne(ctx context.Context, id int64) (*Messages
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:
+		return nil, err
+	}
+}
+func (m *defaultMessagesModel) FindOneLatestMsgByUid(ctx context.Context, uid int64, touserid int64) (*Messages, error) {
+	var resp Messages
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `to_user_id` = ? order by create_at asc limit 1", messagesRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uid, touserid)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		println("error1")
+		return nil, ErrNotFound
+	default:
+		println(err.Error())
 		return nil, err
 	}
 }

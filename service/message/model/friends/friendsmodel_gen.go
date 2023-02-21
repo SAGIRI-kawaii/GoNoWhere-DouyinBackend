@@ -32,6 +32,8 @@ type (
 		Update(ctx context.Context, data *Friends) error
 		Delete(ctx context.Context, id int64) error
 		DeleteById(ctx context.Context, id1 int64, id2 int64) error
+		FindAllByUserId(ctx context.Context, id int64) ([]*Friends, error)
+		FindAllByToUserId(ctx context.Context, touserid int64) ([]*Friends, error)
 		FindOneByBothway(ctx context.Context, id1 int64, id2 int64) (*Friends, error)
 	}
 
@@ -84,10 +86,38 @@ func (m *defaultFriendsModel) FindOne(ctx context.Context, id int64) (*Friends, 
 		return nil, err
 	}
 }
+func (m *defaultFriendsModel) FindAllByUserId(ctx context.Context, userid int64) ([]*Friends, error) {
+	var resp []*Friends
+	query := fmt.Sprintf("select %s from %s where `user_id` = ?", friendsRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, userid)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+
+}
+func (m *defaultFriendsModel) FindAllByToUserId(ctx context.Context, touserid int64) ([]*Friends, error) {
+	var resp []*Friends
+	query := fmt.Sprintf("select %s from %s where `to_user_id` = ?", friendsRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, touserid)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+
+}
 func (m *defaultFriendsModel) FindOneByBothway(ctx context.Context, id1 int64, id2 int64) (*Friends, error) {
 	var resp Friends
 	query := fmt.Sprintf("select  %s from %s where `user_id` = ? and `to_user_id` = ? ", friendsRows, m.table)
-	err := m.QueryRowNoCacheCtx(ctx, resp, query, id1, id2)
+	err := m.QueryRowsNoCacheCtx(ctx, resp, query, id1, id2)
 	switch err {
 	case nil:
 		return &resp, nil

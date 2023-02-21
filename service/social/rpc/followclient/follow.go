@@ -19,12 +19,16 @@ type (
 	DouyinRelationFollowListResponse   = follow.DouyinRelationFollowListResponse
 	DouyinRelationFollowerListRequest  = follow.DouyinRelationFollowerListRequest
 	DouyinRelationFollowerListResponse = follow.DouyinRelationFollowerListResponse
+	DouyinRelationFriendListRequest    = follow.DouyinRelationFriendListRequest
+	DouyinRelationFriendListResponse   = follow.DouyinRelationFriendListResponse
+	FriendUser                         = follow.FriendUser
 	User                               = follow.User
 
 	Follow interface {
 		FollowAction(ctx context.Context, in *DouyinRelationActionRequest, opts ...grpc.CallOption) (*DouyinRelationActionResponse, error)
 		FollowList(ctx context.Context, in *DouyinRelationFollowListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowListResponse, error)
 		FollowerList(ctx context.Context, in *DouyinRelationFollowerListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowerListResponse, error)
+		FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error)
 	}
 
 	defaultFollow struct {
@@ -51,4 +55,9 @@ func (m *defaultFollow) FollowList(ctx context.Context, in *DouyinRelationFollow
 func (m *defaultFollow) FollowerList(ctx context.Context, in *DouyinRelationFollowerListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowerListResponse, error) {
 	client := follow.NewFollowClient(m.cli.Conn())
 	return client.FollowerList(ctx, in, opts...)
+}
+
+func (m *defaultFollow) FriendList(ctx context.Context, in *DouyinRelationFriendListRequest, opts ...grpc.CallOption) (*DouyinRelationFriendListResponse, error) {
+	client := follow.NewFollowClient(m.cli.Conn())
+	return client.FriendList(ctx, in, opts...)
 }

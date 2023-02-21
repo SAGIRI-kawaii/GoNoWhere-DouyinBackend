@@ -3,9 +3,10 @@ package logic
 import (
 	"context"
 	"google.golang.org/grpc/status"
+	"mini-douyin/common/jwtx"
 	"mini-douyin/service/social/rpc/follow"
 	"mini-douyin/service/social/rpc/internal/svc"
-	"mini-douyin/service/user/model"
+	"mini-douyin/service/user/model/users"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,10 +27,17 @@ func NewFollowListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 
 func (l *FollowListLogic) FollowList(in *follow.DouyinRelationFollowListRequest) (*follow.DouyinRelationFollowListResponse, error) {
 	// todo: add your logic here and delete this line
+	res, err := jwtx.ParseToken(in.Token)
+	if err != nil {
+		return nil, err
+	}
+	if in.UserId != res.UserID {
+		return nil, status.Error(100, "非法token")
+	}
 	var u []*follow.User
 	follows, err := l.svcCtx.FollowModel.FindAllByUserId(l.ctx, in.UserId)
 	if err != nil {
-		if err == model.ErrNotFound {
+		if err == users.ErrNotFound {
 			return nil, status.Error(100, "user不存在")
 		}
 		return nil, status.Error(500, err.Error())
@@ -37,7 +45,7 @@ func (l *FollowListLogic) FollowList(in *follow.DouyinRelationFollowListRequest)
 	for _, f := range follows {
 		res, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, f.ToUserId)
 		if err != nil {
-			if err == model.ErrNotFound {
+			if err == users.ErrNotFound {
 				return nil, status.Error(100, "用户不存在")
 			}
 			return nil, status.Error(100, "查询用户失败")

@@ -34,6 +34,7 @@ type (
 		Update(ctx context.Context, data *Follows) error
 		Delete(ctx context.Context, id int64) error
 		DeleteByuid(ctx context.Context, uid int64, touid int64) error // 取消关注
+
 	}
 
 	defaultFollowsModel struct {

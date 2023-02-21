@@ -29,17 +29,20 @@ func NewFollowActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Foll
 
 func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest) (*follow.DouyinRelationActionResponse, error) {
 	// todo: add your logic here and delete this line
+	//解析token
+	claims, err := jwtx.ParseToken(in.Token)
+	userid := claims.UserID
+	if err != nil {
+		return nil, err
+	}
 	//根据ActionType判断操作类型
 	if in.ActionType == 1 {
+
+		// 自己不能关注自己
+		if userid == in.ToUserId {
+			return nil, status.Error(100, "无法关注自己")
+		}
 		// 在follow表中插入一条记录
-		claims, err := jwtx.ParseToken(in.Token)
-		userid := claims.UserID
-
-		/*userid, err := jwtx.ParseToken2Uid("a", in.Token)
-		if err != nil {
-			return nil, err
-		}*/
-
 		newFollow := follows.Follows{
 			UserId:   int64(userid),
 			ToUserId: in.ToUserId,
@@ -75,10 +78,6 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 
 	} else {
 
-		userid, err := jwtx.ParseToken2Uid("a", in.Token)
-		if err != nil {
-			return nil, err
-		}
 		//若两人互关，就删除好友关系
 		res, err := l.svcCtx.FollowModel.FindAllByUserId(l.ctx, in.ToUserId)
 		for _, f := range res {
