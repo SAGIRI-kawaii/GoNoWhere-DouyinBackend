@@ -95,7 +95,7 @@ func (l *FriendListLogic) FriendList(in *follow.DouyinRelationFriendListRequest)
 			}
 
 			us := &follow.FriendUser{
-				Id:              res.Id,
+				Id:              res.UserId,
 				Name:            res.Name,
 				FollowCount:     &res.FollowerCount,
 				FollowerCount:   &res.FollowerCount,

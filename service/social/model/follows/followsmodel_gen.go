@@ -31,6 +31,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*Follows, error)
 		FindAllByUserId(ctx context.Context, uid int64) ([]*Follows, error)     // 查询关注列表
 		FindAllByToUserId(ctx context.Context, touid int64) ([]*Follows, error) // 查询被关注列表
+		FindOneById(ctx context.Context, uid int64, touid int64) error          //查询是否存在
 		Update(ctx context.Context, data *Follows) error
 		Delete(ctx context.Context, id int64) error
 		DeleteByuid(ctx context.Context, uid int64, touid int64) error // 取消关注
@@ -87,6 +88,19 @@ func (m *defaultFollowsModel) FindOne(ctx context.Context, id int64) (*Follows, 
 		return nil, ErrNotFound
 	default:
 		return nil, err
+	}
+}
+func (m defaultFollowsModel) FindOneById(ctx context.Context, uid int64, touid int64) error {
+	var resp *Follows
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `to_user_id` = ?", followsRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uid, touid)
+	switch err {
+	case nil:
+		return nil
+	case sqlc.ErrNotFound:
+		return ErrNotFound
+	default:
+		return err
 	}
 }
 func (m *defaultFollowsModel) FindAllByUserId(ctx context.Context, uid int64) ([]*Follows, error) {

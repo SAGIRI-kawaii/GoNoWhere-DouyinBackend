@@ -42,6 +42,11 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 		if userid == in.ToUserId {
 			return nil, status.Error(100, "无法关注自己")
 		}
+
+		err := l.svcCtx.FollowModel.FindOneById(l.ctx, userid, in.ToUserId)
+		if err != sqlc.ErrNotFound {
+			return nil, status.Error(100, "无法重复关注")
+		}
 		// 在follow表中插入一条记录
 		newFollow := follows.Follows{
 			UserId:   int64(userid),

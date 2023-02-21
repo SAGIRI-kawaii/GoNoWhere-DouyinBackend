@@ -52,7 +52,7 @@ func (l *FollowerListLogic) FollowerList(in *follow.DouyinRelationFollowerListRe
 			return nil, status.Error(100, "查询用户失败")
 		}
 		us := &follow.User{
-			Id:              res.Id,
+			Id:              res.UserId,
 			Name:            res.Name,
 			FollowCount:     &res.FollowerCount,
 			FollowerCount:   &res.FollowerCount,

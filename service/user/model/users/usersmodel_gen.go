@@ -149,7 +149,7 @@ func (m *defaultUsersModel) AddFollowerByUserId(ctx context.Context, uid int64) 
 	if err != nil {
 		return err
 	}
-	data.FollowerCount = data.FollowCount + 1
+	data.FollowerCount = data.FollowerCount + 1
 	err = m.Update(ctx, data)
 	return err
 
@@ -159,7 +159,7 @@ func (m *defaultUsersModel) AddFollowByUserId(ctx context.Context, uid int64) er
 	if err != nil {
 		return err
 	}
-	data.FollowerCount = data.FollowerCount + 1
+	data.FollowCount = data.FollowCount + 1
 	err = m.Update(ctx, data)
 	return err
 }
@@ -168,7 +168,7 @@ func (m *defaultUsersModel) ReduceFollowByUserId(ctx context.Context, uid int64)
 	if err != nil {
 		return err
 	}
-	data.FollowerCount = data.FollowCount - 1
+	data.FollowCount = data.FollowCount - 1
 	err = m.Update(ctx, data)
 	return err
 }
