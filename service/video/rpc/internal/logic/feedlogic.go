@@ -36,16 +36,16 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 	if err != nil {
 		return nil, err
 	}
-	nextTime := time.Now().UnixMilli()
+	nextTime := time.Now().Unix()
 	if len(videos) == 0 {
 		return &video.DouyinFeedResponse{
-			StatusCode: int32(errno.OK.Code),
-			StatusMsg:  &errno.OK.Message,
-			VideoList:  vs,
+			StatusCode: int32(errno.ErrQueryVideosFail.Code),
+			StatusMsg:  &errno.ErrQueryVideosFail.Message,
+			VideoList:  nil,
 			NextTime:   &nextTime,
 		}, nil
 	} else {
-		nextTime = videos[len(videos)-1].UpdateTime.UnixMilli()
+		nextTime = videos[len(videos)-1].UpdateTime.Unix()
 	}
 	for _, v := range videos {
 		author, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, v.AuthorId)
@@ -56,6 +56,7 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 		if err != nil {
 			return nil, err
 		}
+		//logx.Info("videoID:" + strconv.FormatInt(v.VideoId, 10) + "time:" + strconv.FormatInt(v.UpdateTime.Unix(), 10))
 		video_t := &video.Video{
 			Id: v.Id,
 			Author: &video.User{
@@ -80,7 +81,8 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 		}
 		vs = append(vs, video_t)
 	}
-	nextTime = videos[len(videos)-1].UpdateTime.UnixMilli()
+	nextTime = videos[len(videos)-1].UpdateTime.Unix()
+	//logx.Info("Next_Time:" + time.Unix(nextTime, 0).String())
 	return &video.DouyinFeedResponse{
 		StatusCode: int32(errno.OK.Code),
 		StatusMsg:  &errno.OK.Message,

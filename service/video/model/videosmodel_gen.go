@@ -6,6 +6,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"strings"
 	"time"
 
@@ -68,11 +69,14 @@ func newVideosModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultVideosModel {
 func (m *defaultVideosModel) GetFeedVideos(ctx context.Context, limit int, latestTime *int64) ([]*Videos, error) {
 	var resp []*Videos
 	if latestTime == nil || *latestTime == 0 {
-		cur_time := int64(time.Now().UnixMilli())
+		cur_time := int64(time.Now().Unix())
 		latestTime = &cur_time
 	}
+	querytime := time.Unix(*latestTime, 0).String()
+	//logx.Info("querytime: "+querytime)
 	query := fmt.Sprintf("select %s from %s where `update_time` <= ? order by %s desc %s", videosRows, m.table, "update_time", "limit 30")
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, *latestTime)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, querytime)
+
 	switch err {
 	case nil:
 		return resp, nil
