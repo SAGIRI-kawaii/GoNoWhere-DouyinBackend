@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 
 	"mini-douyin/service/social/rpc/follow"
@@ -16,14 +15,14 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/follow.yaml", "the config file")
+//var configFile = flag.String("f", "etc/follow.yaml", "the config file")
 
 func main() {
 	//dal.InitDB()
-	flag.Parse()
+	//flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	conf.MustLoad("common/config/rpc/follow.yaml", &c)
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {

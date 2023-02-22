@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 
 	"mini-douyin/service/api/internal/config"
@@ -12,13 +11,13 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/api.yaml", "the config file")
+//var configFile = flag.String("f", "etc/api.yaml", "the config file")
 
 func main() {
-	flag.Parse()
+	//flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	conf.MustLoad("common/config/rpc/api.yaml", &c)
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()

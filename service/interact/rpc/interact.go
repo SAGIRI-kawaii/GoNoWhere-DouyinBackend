@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 
 	"mini-douyin/service/interact/rpc/interact"
@@ -16,13 +15,13 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/interact.yaml", "the config file")
+//var configFile = flag.String("f", "etc/interact.yaml", "the config file")
 
 func main() {
-	flag.Parse()
+	//flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	conf.MustLoad("common/config/rpc/interact.yaml", &c)
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
