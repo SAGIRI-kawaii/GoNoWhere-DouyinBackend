@@ -27,13 +27,13 @@ func NewFollowListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 
 func (l *FollowListLogic) FollowList(in *follow.DouyinRelationFollowListRequest) (*follow.DouyinRelationFollowListResponse, error) {
 	// todo: add your logic here and delete this line
-	res, err := jwtx.ParseToken(in.Token)
+	_, err := jwtx.ParseToken(in.Token)
 	if err != nil {
 		return nil, err
 	}
-	if in.UserId != res.UserID {
+	/*if in.UserId != res.UserID {
 		return nil, status.Error(100, "非法token")
-	}
+	}*/
 	var u []*follow.User
 	follows, err := l.svcCtx.FollowModel.FindAllByUserId(l.ctx, in.UserId)
 	if err != nil {
