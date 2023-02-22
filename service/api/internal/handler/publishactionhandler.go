@@ -11,7 +11,7 @@ import (
 
 func PublishActionHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.Duyin_publish_action_request
+		var req types.Douyin_publish_action_request
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return

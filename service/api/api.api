@@ -170,13 +170,13 @@ type (
 
 type (
 	// 视频投稿
-	Duyin_publish_action_request {
+	Douyin_publish_action_request {
 		Token string `form:"token"`
 		Data  []byte `form:"data"`
 		Title string `form:"title"`
 	}
 
-	Duyin_publish_action_response {
+	Douyin_publish_action_response {
 		StatusCode int32  `json:"status_code"`
 		StatusMsg  string `json:"status_msg,optional"`
 	}
@@ -312,7 +312,7 @@ service API {
 	get /douyin/publish/list (Douyin_publish_list_request) returns (Douyin_publish_list_response)
 	
 	@handler PublishAction
-	post /douyin/publish/action (Duyin_publish_action_request) returns (Duyin_publish_action_response)
+	post /douyin/publish/action (Douyin_publish_action_request) returns (Douyin_publish_action_response)
 	
 	// follow
 	@handler RelationAction

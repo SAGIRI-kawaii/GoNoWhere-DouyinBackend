@@ -147,13 +147,13 @@ type Douyin_user_response struct {
 	User       Douyin_user_info `json:"user"`
 }
 
-type Duyin_publish_action_request struct {
+type Douyin_publish_action_request struct {
 	Token string `form:"token"`
 	Data  []byte `form:"data"`
 	Title string `form:"title"`
 }
 
-type Duyin_publish_action_response struct {
+type Douyin_publish_action_response struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg,optional"`
 }

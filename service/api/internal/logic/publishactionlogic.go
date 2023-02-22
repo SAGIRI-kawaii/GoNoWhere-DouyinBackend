@@ -23,7 +23,7 @@ func NewPublishActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pub
 	}
 }
 
-func (l *PublishActionLogic) PublishAction(req *types.Duyin_publish_action_request) (resp *types.Duyin_publish_action_response, err error) {
+func (l *PublishActionLogic) PublishAction(req *types.Douyin_publish_action_request) (resp *types.Douyin_publish_action_response, err error) {
 	res, err := l.svcCtx.VideoRpc.PublishAction(l.ctx, &videoservice.DouyinPublishActionRequest{
 		Token: req.Token,
 		Data:  req.Data,
@@ -32,7 +32,7 @@ func (l *PublishActionLogic) PublishAction(req *types.Duyin_publish_action_reque
 	if err != nil {
 		return nil, err
 	}
-	return &types.Duyin_publish_action_response{
+	return &types.Douyin_publish_action_response{
 		StatusCode: res.StatusCode,
 		StatusMsg:  *res.StatusMsg,
 	}, nil
