@@ -44,8 +44,6 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 			VideoList:  nil,
 			NextTime:   &nextTime,
 		}, nil
-	} else {
-		nextTime = videos[len(videos)-1].UpdateTime.Unix()
 	}
 	for _, v := range videos {
 		author, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, v.AuthorId)
@@ -58,9 +56,9 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 		}
 		//logx.Info("videoID:" + strconv.FormatInt(v.VideoId, 10) + "time:" + strconv.FormatInt(v.UpdateTime.Unix(), 10))
 		video_t := &video.Video{
-			Id: v.Id,
+			Id: v.VideoId,
 			Author: &video.User{
-				Id:              author.Id,
+				Id:              author.UserId,
 				Name:            author.Name,
 				FollowCount:     &author.FollowCount,
 				FollowerCount:   &author.FollowerCount,
