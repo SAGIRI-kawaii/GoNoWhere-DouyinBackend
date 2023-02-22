@@ -5,6 +5,7 @@ import (
 
 	"mini-douyin/common/jwtx"
 	model "mini-douyin/service/interact/model/favorites"
+	"mini-douyin/service/interact/model/videos"
 	"mini-douyin/service/interact/rpc/interact"
 	"mini-douyin/service/interact/rpc/internal/svc"
 
@@ -37,6 +38,19 @@ func (l *FavoriteActionLogic) FavoriteAction(in *interact.DouyinFavoriteActionRe
 	if err != nil {
 		return nil, err
 	}
+
+	//	判断   VideoId 是否存在
+
+	var existvideo *videos.Videos
+	existvideo, err = l.svcCtx.VideoModel.FindOneByVideoId(l.ctx, in.VideoId)
+	if existvideo == nil {
+		var videonul string = "要点赞的video不存在"
+		return &interact.DouyinFavoriteActionResponse{
+			StatusCode: int32(0),
+			StatusMsg:  &videonul,
+		}, nil
+	}
+
 	// action_type：1-点赞，2-取消点赞
 	ActionType := in.ActionType
 	if ActionType == 1 {

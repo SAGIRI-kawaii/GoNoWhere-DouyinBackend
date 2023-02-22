@@ -123,13 +123,14 @@ func (m *defaultFavoritesModel) DeleteByUserId2VideoId(ctx context.Context, User
 }
 
 func (m *defaultFavoritesModel) FindVideoListByUserId(ctx context.Context, UserId int64) ([]int64, error) {
-	favoritesIdKey := fmt.Sprintf("%s%v", cacheFavoritesIdPrefix, UserId)
+	// favoritesIdKey := fmt.Sprintf("%s%v", cacheFavoritesIdPrefix, UserId)
 	// var resp  Favorites
 	var c []int64
-	err := m.QueryRowCtx(ctx, &c, favoritesIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
-		query := fmt.Sprintf("select `video_id` from %s  where `user_id` = ?", m.table)
-		return conn.QueryRowsCtx(ctx, v, query, UserId)
-	})
+	// err := m.QueryRowCtx(ctx, &c, favoritesIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		query := fmt.Sprintf("select  DISTINCT `video_id` from %s  where `user_id` = ?", m.table)
+		// return conn.QueryRowsCtx(ctx, v, query, UserId)
+		err := m.QueryRowsNoCacheCtx(ctx, &c, query, UserId)
+	// })
 	switch err {
 	case nil:
 		return c, nil

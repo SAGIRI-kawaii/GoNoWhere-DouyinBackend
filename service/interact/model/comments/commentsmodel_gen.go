@@ -114,13 +114,14 @@ func (m *defaultCommentsModel) tableName() string {
 	return m.table
 }
 func (m *defaultCommentsModel) FindList(ctx context.Context, id int64) ([]*Comments, error) {
-	commentsIdKey := fmt.Sprintf("%s%v", cacheCommentsIdPrefix, id)
+	// commentsIdKey := fmt.Sprintf("%s%v", cacheCommentsIdPrefix, id)
 	// var resp Comments
 	var c []*Comments
-	err := m.QueryRowCtx(ctx, &c, commentsIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
-		query := fmt.Sprintf("select %s from %s where `video_id` = ?", commentsRows, m.table)
-		return conn.QueryRowsCtx(ctx, v, query, id)
-	})
+	// err := m.QueryRowCtx(ctx, &c, commentsIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		query := fmt.Sprintf("select  DISTINCT %s from %s where `video_id` = ?", commentsRows, m.table)
+		// return conn.QueryRowsCtx(ctx, v, query, id)
+		err :=  m.QueryRowsNoCacheCtx(ctx, &c, query, id)
+	// })
 	switch err {
 	case nil:
 		return c, nil
