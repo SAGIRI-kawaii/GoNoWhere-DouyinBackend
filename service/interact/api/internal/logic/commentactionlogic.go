@@ -37,11 +37,15 @@ func (l *CommentActionLogic) CommentAction(req *types.Douyin_comment_action_requ
 	if err != nil {
 		return nil, err
 	}
+
+	var newComment = types.Douyin_comment{
+		Content: req.CommentText,
+	}
 	if req.ActionType == 1 {
 		return &types.Douyin_comment_action_response{
 			StatusCode: int(res.StatusCode),
 			StatusMsg:  *res.StatusMsg,
-			Comment:    *res.Comment,
+			Comment:    newComment,
 		}, nil
 	}
 
@@ -49,7 +53,7 @@ func (l *CommentActionLogic) CommentAction(req *types.Douyin_comment_action_requ
 		return &types.Douyin_comment_action_response{
 			StatusCode: int(res.StatusCode),
 			StatusMsg:  *res.StatusMsg,
-			// Comment:    *res.Comment,
+			Comment:    newComment,
 		}, nil
 	}
 

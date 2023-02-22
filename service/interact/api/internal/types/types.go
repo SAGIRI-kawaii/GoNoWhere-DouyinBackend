@@ -32,9 +32,9 @@ type Douyin_comment_action_request struct {
 }
 
 type Douyin_comment_action_response struct {
-	StatusCode int    `json:"status_code"`
-	StatusMsg  string `json:"status_msg"`
-	Comment    string `json:"comment"`
+	StatusCode int            `json:"status_code"`
+	StatusMsg  string         `json:"status_msg"`
+	Comment    Douyin_comment `json:"comment"`
 }
 
 type Douyin_comment_list_request struct {

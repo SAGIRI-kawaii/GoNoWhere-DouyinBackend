@@ -43,6 +43,9 @@ func (l *FavoriteActionLogic) FavoriteAction(in *interact.DouyinFavoriteActionRe
 
 	var existvideo *videos.Videos
 	existvideo, err = l.svcCtx.VideoModel.FindOneByVideoId(l.ctx, in.VideoId)
+	if err != nil {
+		return nil, err
+	}
 	if existvideo == nil {
 		var videonul string = "要点赞的video不存在"
 		return &interact.DouyinFavoriteActionResponse{
@@ -59,6 +62,11 @@ func (l *FavoriteActionLogic) FavoriteAction(in *interact.DouyinFavoriteActionRe
 			VideoId: in.VideoId,
 		}
 		l.svcCtx.FavoriteModel.Insert(l.ctx, &newFavorite)
+
+		err = l.svcCtx.VideoModel.AddFavoriteByVideoId(l.ctx, in.VideoId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
 		var a string = "点赞成功"
 		return &interact.DouyinFavoriteActionResponse{
 			StatusCode: int32(0),
@@ -70,6 +78,12 @@ func (l *FavoriteActionLogic) FavoriteAction(in *interact.DouyinFavoriteActionRe
 		if err != nil {
 			return nil, status.Error(100, "取消点赞失败")
 		}
+
+		err = l.svcCtx.VideoModel.ReduceFavoriteByVideoId(l.ctx, in.VideoId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
+
 		var a string = "取消点赞成功"
 		return &interact.DouyinFavoriteActionResponse{
 			StatusCode: int32(0),

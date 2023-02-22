@@ -61,7 +61,7 @@ func (l *CommentListLogic) CommentList(in *interact.DouyinCommentListRequest) (*
 			WorkCount:       res.User.WorkCount,
 			FavoriteCount:   res.User.FavoriteCount,
 		}
-		var timetostring string = item.CreateAt.GoString()
+		var timetostring string = item.CreateAt.Format("01-02")
 		// var CommentsList []*interact.DouyinComment =make([]*interact.DouyinComment, 0)
 		CommentsList = append(CommentsList, &interact.Comment{
 			Id:         item.Id,

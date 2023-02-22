@@ -48,12 +48,23 @@ func (l *CommentActionLogic) CommentAction(in *interact.DouyinCommentActionReque
 			Content: *in.CommentText,
 		}
 		l.svcCtx.CommentModel.Insert(l.ctx, &newComment)
+		err = l.svcCtx.VideoModel.AddCommentByVideoId(l.ctx, in.VideoId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
+
+		/**
+		返回Content类型
+		*/
+		newCommentReturn := interact.Comment{
+			Content: *in.CommentText,
+		}
 		var a string = "发布评论成功"
 		return &interact.DouyinCommentActionResponse{
 
 			StatusCode: int32(0),
 			StatusMsg:  &a,
-			Comment:    in.CommentText,
+			Comment:    &newCommentReturn,
 		}, nil
 
 	} else if ActionType == 2 {
@@ -62,6 +73,12 @@ func (l *CommentActionLogic) CommentAction(in *interact.DouyinCommentActionReque
 		if err != nil {
 			return nil, status.Error(100, "error")
 		}
+
+		err = l.svcCtx.VideoModel.ReduceCommentByVideoId(l.ctx, in.VideoId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
+
 		var a string = "删除评论成功"
 		return &interact.DouyinCommentActionResponse{
 			StatusCode: int32(0),

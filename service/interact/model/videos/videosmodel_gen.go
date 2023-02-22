@@ -36,6 +36,10 @@ type (
 		GetFeedVideos(ctx context.Context, limit int, latestTime *int64) ([]*Videos, error)
 		GetVideosByAuthorID(ctx context.Context, authorid *int64) ([]*Videos, error)
 		FindVideoListByUserId(ctx context.Context, authorId int64) ([]*Videos, error)
+		AddFavoriteByVideoId(ctx context.Context, VideoId int64) error
+		ReduceFavoriteByVideoId(ctx context.Context, VideoId int64) error
+		AddCommentByVideoId(ctx context.Context, VideoId int64) error
+		ReduceCommentByVideoId(ctx context.Context, VideoId int64) error
 	}
 
 	defaultVideosModel struct {
@@ -207,4 +211,43 @@ func (m *defaultVideosModel) FindVideoListByUserId(ctx context.Context, authorId
 	default:
 		return nil, err
 	}
+}
+
+
+func (m *defaultVideosModel) AddFavoriteByVideoId(ctx context.Context, VideoId int64) error {
+	data, err := m.FindOneByVideoId(ctx, VideoId)
+	if err != nil {
+		return err
+	}
+	data.FavoriteCount = data.FavoriteCount + 1
+	err = m.Update(ctx, data)
+	return err
+}
+func (m *defaultVideosModel) ReduceFavoriteByVideoId(ctx context.Context, VideoId int64) error {
+	data, err := m.FindOneByVideoId(ctx, VideoId)
+	if err != nil {
+		return err
+	}
+	data.FavoriteCount = data.FavoriteCount - 1
+	err = m.Update(ctx, data)
+	return err
+}
+
+func(m *defaultVideosModel)AddCommentByVideoId(ctx context.Context, VideoId int64) error{
+	data, err :=m.FindOneByVideoId(ctx,VideoId)
+	if err != nil {
+		return err
+	}
+	data.CommentCount = data.CommentCount + 1
+	err = m.Update(ctx, data)
+	return err
+}
+func(m *defaultVideosModel) ReduceCommentByVideoId(ctx context.Context, VideoId int64) error{
+	data, err :=m.FindOneByVideoId(ctx,VideoId)
+	if err != nil {
+		return err
+	}
+	data.CommentCount = data.CommentCount - 1
+	err = m.Update(ctx, data)
+	return err
 }

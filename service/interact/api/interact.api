@@ -17,8 +17,8 @@ type (
 	}
 
 	Douyin_favorite_list_response {
-		StatusCode int          `json:"status_code"`
-		StatusMsg  string       `json:"status_msg"`
+		StatusCode int             `json:"status_code"`
+		StatusMsg  string          `json:"status_msg"`
 		VideoList  []*Douyin_video `json:"video_list"`
 	}
 
@@ -32,9 +32,9 @@ type (
 	}
 
 	Douyin_comment_action_response {
-		StatusCode int    `json:"status_code"`
-		StatusMsg  string `json:"status_msg"`
-		Comment    string `json:"comment"`
+		StatusCode int            `json:"status_code"`
+		StatusMsg  string         `json:"status_msg"`
+		Comment    Douyin_comment `json:"comment"`
 	}
 
 	// 评论列表
