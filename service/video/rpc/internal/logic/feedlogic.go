@@ -60,7 +60,7 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 		video_t := &video.Video{
 			Id: v.Id,
 			Author: &video.User{
-				Id:              author.Id,
+				Id:              author.UserId,
 				Name:            author.Name,
 				FollowCount:     &author.FollowCount,
 				FollowerCount:   &author.FollowerCount,

@@ -49,7 +49,7 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 		}
 		// 在follow表中插入一条记录
 		newFollow := follows.Follows{
-			UserId:   int64(userid),
+			UserId:   userid,
 			ToUserId: in.ToUserId,
 		}
 		_, err = l.svcCtx.FollowModel.Insert(l.ctx, &newFollow)
@@ -73,7 +73,7 @@ func (l *FollowActionLogic) FollowAction(in *follow.DouyinRelationActionRequest)
 			}
 		}
 		// todo: 改变User里面的关注数
-		err = l.svcCtx.UserModel.AddFollowByUserId(l.ctx, int64(userid))
+		err = l.svcCtx.UserModel.AddFollowByUserId(l.ctx, userid)
 		err = l.svcCtx.UserModel.AddFollowerByUserId(l.ctx, in.ToUserId)
 		if err != nil {
 			return nil, status.Error(100, err.Error())
