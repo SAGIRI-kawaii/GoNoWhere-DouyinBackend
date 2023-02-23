@@ -100,7 +100,7 @@ func (m *defaultMessagesModel) FindOneLatestMsgByUid(ctx context.Context, uid in
 
 func (m *defaultMessagesModel) FindLatestMsg(ctx context.Context, uid int64, preMsgTime string) (*[]Messages, error) {
 	var resp []Messages
-	query := fmt.Sprintf("select %s from %s where (`user_id` = ? or `to_user_id` = ?) and create_at >= ? order by create_at asc limit 30", messagesRows, m.table)
+	query := fmt.Sprintf("select %s from %s where (`user_id` = ? or `to_user_id` = ?) and create_at > ? order by create_at asc limit 30", messagesRows, m.table)
 	println(query)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uid, uid, preMsgTime)
 	switch err {
