@@ -49,7 +49,7 @@ func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest)
 		FavoriteCount: 0,
 		CommentCount:  0,
 		PlayUrl:       videoUrl,
-		CoverUrl:      "",
+		CoverUrl:      "http://rqbxff5oo.hn-bkt.clouddn.com/cover/cover.jpeg",
 	}
 	user, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, int64(userid))
 	if err != nil {
