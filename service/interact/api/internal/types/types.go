@@ -33,8 +33,8 @@ type Douyin_comment_action_request struct {
 
 type Douyin_comment_action_response struct {
 	StatusCode int            `json:"status_code"`
-	StatusMsg  string         `json:"status_msg"`
-	Comment    Douyin_comment `json:"comment"`
+	StatusMsg string         `json:"status_msg"`
+	Comment   Douyin_comment `json:"comment"`
 }
 
 type Douyin_comment_list_request struct {
@@ -49,9 +49,9 @@ type Douyin_comment_list_response struct {
 }
 
 type Douyin_video struct {
-	Id            int         `json:"id"`
-	Author        Douyin_user `json:"author"`
-	PlayUrl       string      `json:"play_url"`
+	Id      int         `json:"id"`
+	Author  Douyin_user `json:"author"`
+	PlayUrl string      `json:"play_url"`
 	CoverUrl      string      `json:"cover_url"`
 	FavoriteCount int         `json:"favorite_count"`
 	CommentCount  int         `json:"comment_count"`
@@ -60,9 +60,9 @@ type Douyin_video struct {
 }
 
 type Douyin_comment struct {
-	Id         int         `json:"id"`
-	User       Douyin_user `json:"user"`
-	Content    string      `json:"content"`
+	Id      int         `json:"id"`
+	User    Douyin_user `json:"user"`
+	Content string      `json:"content"`
 	CreateDate string      `json:"create_date"`
 }
 

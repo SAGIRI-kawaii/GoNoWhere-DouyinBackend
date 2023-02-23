@@ -228,7 +228,10 @@ func (m *defaultVideosModel) ReduceFavoriteByVideoId(ctx context.Context, VideoI
 	if err != nil {
 		return err
 	}
-	data.FavoriteCount = data.FavoriteCount - 1
+	if(data.FavoriteCount>0){
+		data.FavoriteCount = data.FavoriteCount - 1
+	}
+
 	err = m.Update(ctx, data)
 	return err
 }
@@ -247,7 +250,10 @@ func(m *defaultVideosModel) ReduceCommentByVideoId(ctx context.Context, VideoId 
 	if err != nil {
 		return err
 	}
-	data.CommentCount = data.CommentCount - 1
+	if(data.CommentCount>0){
+		data.CommentCount = data.CommentCount - 1
+	}
+	
 	err = m.Update(ctx, data)
 	return err
 }

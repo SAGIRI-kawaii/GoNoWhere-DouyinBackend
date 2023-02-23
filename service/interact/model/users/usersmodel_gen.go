@@ -223,7 +223,10 @@ func (m *defaultUsersModel) ReduceFavoriteByUserId(ctx context.Context, uid int6
 		return err
 	}
 
-	data.FavoriteCount.Int64 = data.FavoriteCount.Int64 - 1
+	
+	if(data.FavoriteCount.Int64 >0){
+		data.FavoriteCount.Int64 = data.FavoriteCount.Int64 - 1
+	}
 	err = m.Update(ctx, data)
 	return err
 }
@@ -249,8 +252,10 @@ func (m *defaultUsersModel) ReduceFavoritedByUId(ctx context.Context, uid int64)
 	if err != nil {
 		return err
 	}
-
-	data.TotalFavorited.Int64 = data.TotalFavorited.Int64 - 1
+	if(data.TotalFavorited.Int64 >0){
+		data.TotalFavorited.Int64 = data.TotalFavorited.Int64 - 1
+	}
+	
 	err = m.Update(ctx, data)
 	return err
 }
