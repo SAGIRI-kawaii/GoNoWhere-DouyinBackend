@@ -8,6 +8,7 @@ import (
 	"mini-douyin/service/interact/model/videos"
 	"mini-douyin/service/interact/rpc/interact"
 	"mini-douyin/service/interact/rpc/internal/svc"
+	"mini-douyin/service/video/rpc/video"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/status"
@@ -63,10 +64,31 @@ func (l *FavoriteActionLogic) FavoriteAction(in *interact.DouyinFavoriteActionRe
 		}
 		l.svcCtx.FavoriteModel.Insert(l.ctx, &newFavorite)
 
+		// 修改被点赞video信息的点赞数
 		err = l.svcCtx.VideoModel.AddFavoriteByVideoId(l.ctx, in.VideoId)
 		if err != nil {
 			return nil, status.Error(100, "数据库操作出错")
 		}
+
+		// 修改该用户的点赞数
+		err = l.svcCtx.UserModel.AddFavoriteByUserId(l.ctx, UserId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
+
+		// 修改被点赞video 作者的 被点赞数
+		c, err := l.svcCtx.VideoRpc.SearchVideo(l.ctx, &video.DouyinSearchRequest{
+			VideoId: in.VideoId,
+		})
+		if err != nil {
+			return nil, err
+		}
+		err = l.svcCtx.UserModel.AddFavoritedByUId(l.ctx, c.Video.Author.Id) //不是uid
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
+
+		// return
 		var a string = "点赞成功"
 		return &interact.DouyinFavoriteActionResponse{
 			StatusCode: int32(0),
@@ -78,12 +100,29 @@ func (l *FavoriteActionLogic) FavoriteAction(in *interact.DouyinFavoriteActionRe
 		if err != nil {
 			return nil, status.Error(100, "取消点赞失败")
 		}
-
+		// 修改被点赞video信息的点赞数
 		err = l.svcCtx.VideoModel.ReduceFavoriteByVideoId(l.ctx, in.VideoId)
 		if err != nil {
 			return nil, status.Error(100, "数据库操作出错")
 		}
+		// 修改该用户的点赞数
+		err = l.svcCtx.UserModel.ReduceFavoriteByUserId(l.ctx, UserId)
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
+		// 修改被点赞video 作者的 被点赞数
+		c, err := l.svcCtx.VideoRpc.SearchVideo(l.ctx, &video.DouyinSearchRequest{
+			VideoId: in.VideoId,
+		})
+		if err != nil {
+			return nil, err
+		}
+		err = l.svcCtx.UserModel.ReduceFavoritedByUId(l.ctx, c.Video.Author.Id) //是uid
+		if err != nil {
+			return nil, status.Error(100, "数据库操作出错")
+		}
 
+		// return
 		var a string = "取消点赞成功"
 		return &interact.DouyinFavoriteActionResponse{
 			StatusCode: int32(0),

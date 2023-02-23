@@ -37,6 +37,11 @@ type (
 		AddFollowByUserId(ctx context.Context, uid int64) error
 		ReduceFollowerByUserId(ctx context.Context, uid int64) error
 		ReduceFollowByUserId(ctx context.Context, uid int64) error
+		AddFavoriteByUserId(ctx context.Context, uid int64) error
+		ReduceFavoriteByUserId(ctx context.Context, uid int64) error
+		AddFavoritedByUId(ctx context.Context, uid int64) error
+		ReduceFavoritedByUId(ctx context.Context, uid int64) error
+
 	}
 
 	defaultUsersModel struct {
@@ -194,4 +199,58 @@ func (m *defaultUsersModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn,
 
 func (m *defaultUsersModel) tableName() string {
 	return m.table
+}
+
+
+func (m *defaultUsersModel) AddFavoriteByUserId(ctx context.Context, uid int64) error{
+	data, err := m.FindOneByUserId(ctx, uid)
+	if err != nil {
+		return err
+	}
+	if data.FavoriteCount.Valid == false{
+		data.FavoriteCount.Valid =true
+		data.FavoriteCount.Int64 = 1
+	}else{
+		data.FavoriteCount.Int64 = data.FavoriteCount.Int64 + 1
+	}
+	err = m.Update(ctx, data)
+	return err
+
+}
+func (m *defaultUsersModel) ReduceFavoriteByUserId(ctx context.Context, uid int64) error {
+	data, err := m.FindOneByUserId(ctx, uid)
+	if err != nil {
+		return err
+	}
+
+	data.FavoriteCount.Int64 = data.FavoriteCount.Int64 - 1
+	err = m.Update(ctx, data)
+	return err
+}
+
+
+func (m *defaultUsersModel) AddFavoritedByUId(ctx context.Context, uid int64) error{
+	data, err := m.FindOneByUserId(ctx, uid)
+	if err != nil {
+		return err
+	}
+	if data.TotalFavorited.Valid == false{
+		data.TotalFavorited.Valid =true
+		data.TotalFavorited.Int64 = 1
+	}else{
+		data.TotalFavorited.Int64 = data.TotalFavorited.Int64 + 1
+	}
+	err = m.Update(ctx, data)
+	return err
+
+}
+func (m *defaultUsersModel) ReduceFavoritedByUId(ctx context.Context, uid int64) error {
+	data, err := m.FindOneByUserId(ctx, uid)
+	if err != nil {
+		return err
+	}
+
+	data.TotalFavorited.Int64 = data.TotalFavorited.Int64 - 1
+	err = m.Update(ctx, data)
+	return err
 }

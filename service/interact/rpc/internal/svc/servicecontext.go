@@ -33,6 +33,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		CommentModel:  comments.NewCommentsModel(conn, c.CacheRedis),
 		FavoriteModel: favorites.NewFavoritesModel(conn, c.CacheRedis),
 		VideoModel:    videos.NewVideosModel(conn, c.CacheRedis),
+		UserModel:     users.NewUsersModel(conn, c.CacheRedis),
 		UserRpc:       userclient.NewUser(zrpc.MustNewClient(c.UserRpc)),
 		VideoRpc:      videoservice.NewVideoService(zrpc.MustNewClient(c.VideoRpc)),
 	}
