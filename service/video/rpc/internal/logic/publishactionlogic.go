@@ -56,8 +56,19 @@ func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest)
 		return nil, err
 	}
 	err1 := l.svcCtx.UserModel.Update(l.ctx, &model.Users{
-		Id:        user.Id,
-		WorkCount: sql.NullInt64{Valid: true, Int64: int64(user.WorkCount.Int64 + 1)},
+		Id:              user.Id,
+		CreateAt:        user.CreateAt,
+		DeletedAt:       user.DeletedAt,
+		Name:            user.Name,
+		FollowCount:     user.FollowCount,
+		FollowerCount:   user.FollowerCount,
+		UserId:          user.UserId,
+		Avatar:          user.Avatar,
+		BackgroundImage: user.BackgroundImage,
+		Signature:       user.Signature,
+		TotalFavorited:  user.TotalFavorited,
+		WorkCount:       sql.NullInt64{Valid: true, Int64: int64(user.WorkCount.Int64 + 1)},
+		FavoriteCount:   user.FavoriteCount,
 	})
 	if err1 != nil {
 		return nil, err1
