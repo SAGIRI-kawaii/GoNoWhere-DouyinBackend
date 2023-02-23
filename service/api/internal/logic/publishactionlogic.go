@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"io/ioutil"
+	"mini-douyin/common/errno"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -52,6 +53,9 @@ func NewPublishActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pub
 
 func (l *PublishActionLogic) PublishAction(req *http.Request) (resp *types.Douyin_publish_action_response, err error) {
 	data, err := FromFile(req, "data")
+	if err != nil {
+		return nil, errno.ErrFileTooMuchBig
+	}
 	token := req.FormValue("token")
 	title := req.FormValue("title")
 	res, err := l.svcCtx.VideoRpc.PublishAction(l.ctx, &videoservice.DouyinPublishActionRequest{
