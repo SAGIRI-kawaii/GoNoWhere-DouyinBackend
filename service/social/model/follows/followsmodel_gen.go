@@ -91,9 +91,9 @@ func (m *defaultFollowsModel) FindOne(ctx context.Context, id int64) (*Follows, 
 	}
 }
 func (m defaultFollowsModel) FindOneById(ctx context.Context, uid int64, touid int64) error {
-	var resp *Follows
+	var resp Follows
 	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `to_user_id` = ?", followsRows, m.table)
-	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uid, touid)
+	err := m.QueryRowNoCacheCtx(ctx, resp, query, uid, touid)
 	switch err {
 	case nil:
 		return nil

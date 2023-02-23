@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 
 	"google.golang.org/grpc/status"
 	"mini-douyin/common/jwtx"
@@ -46,8 +47,9 @@ func (l *FollowerListLogic) FollowerList(in *follow.DouyinRelationFollowerListRe
 	}
 	for _, f := range follows {
 		var isf bool
+
 		err := l.svcCtx.FollowModel.FindOneById(l.ctx, in.UserId, f.UserId)
-		if err == nil {
+		if err != sqlc.ErrNotFound {
 			isf = true
 		} else {
 			isf = false
