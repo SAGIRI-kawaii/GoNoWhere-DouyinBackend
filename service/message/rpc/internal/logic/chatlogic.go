@@ -54,8 +54,8 @@ func (l *ChatLogic) Chat(in *message.DouyinMessageChatRequest) (*message.DouyinM
 		time2 := t.UnixMilli()
 		ansMsg = append(ansMsg, &message.Message{
 			Id:         (*messages)[i].Id,
-			ToUserId:   (*messages)[i].UserId.Int64,
-			FromUserId: (*messages)[i].ToUserId.Int64,
+			ToUserId:   (*messages)[i].ToUserId.Int64,
+			FromUserId: (*messages)[i].UserId.Int64,
 			Content:    (*messages)[i].Content.String,
 			CreateTime: &time2,
 		})
