@@ -34,11 +34,29 @@ func (l *CommentActionLogic) CommentAction(req *types.Douyin_comment_action_requ
 	if err != nil {
 		return nil, err
 	}
+	resComment := types.Douyin_comment{
+		Id: res.Comment.Id,
+		User: types.Douyin_user_info{
+			ID:              res.Comment.User.Id,
+			Name:            res.Comment.User.Name,
+			FollowCount:     *res.Comment.User.FollowCount,
+			FollowerCount:   *res.Comment.User.FollowerCount,
+			IsFollow:        res.Comment.User.IsFollow,
+			Avatar:          *res.Comment.User.Avatar,
+			BackgroundImage: *res.Comment.User.BackgroundImage,
+			Signature:       *res.Comment.User.Signature,
+			TotalFavorited:  *res.Comment.User.TotalFavorited,
+			WorkCount:       *res.Comment.User.WorkCount,
+			FavoriteCount:   *res.Comment.User.FavoriteCount,
+		},
+		Content:    res.Comment.Content,
+		CreateDate: res.Comment.CreateDate,
+	}
 	if req.ActionType == 1 {
 		return &types.Douyin_comment_action_response{
 			StatusCode: res.StatusCode,
 			StatusMsg:  *res.StatusMsg,
-			Comment:    *res.Comment,
+			Comment:    resComment,
 		}, nil
 	}
 
@@ -46,7 +64,7 @@ func (l *CommentActionLogic) CommentAction(req *types.Douyin_comment_action_requ
 		return &types.Douyin_comment_action_response{
 			StatusCode: res.StatusCode,
 			StatusMsg:  *res.StatusMsg,
-			Comment:    *res.Comment,
+			Comment:    resComment,
 		}, nil
 	}
 

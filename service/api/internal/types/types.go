@@ -46,9 +46,9 @@ type Douyin_comment_action_request struct {
 }
 
 type Douyin_comment_action_response struct {
-	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,optional"`
-	Comment    string `json:"comment,optional"`
+	StatusCode int32          `json:"status_code"`
+	StatusMsg  string         `json:"status_msg,optional"`
+	Comment    Douyin_comment `json:"comment,optional"`
 }
 
 type Douyin_comment_list_request struct {
@@ -97,7 +97,7 @@ type Douyin_message struct {
 	ToUserID   int64  `json:"to_user_id"`
 	FromUserID int64  `json:"from_user_id"`
 	Content    string `json:"content"`
-	CreateTime string `json:"create_time,optional"`
+	CreateTime int64  `json:"create_time,optional"`
 }
 
 type Douyin_message_action_request struct {
@@ -149,7 +149,6 @@ type Douyin_user_response struct {
 
 type Douyin_publish_action_request struct {
 	Token string `form:"token"`
-	Data  []byte `form:"data"`
 	Title string `form:"title"`
 }
 
