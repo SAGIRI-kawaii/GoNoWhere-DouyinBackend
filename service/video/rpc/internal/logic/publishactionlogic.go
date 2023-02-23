@@ -51,6 +51,17 @@ func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest)
 		PlayUrl:       videoUrl,
 		CoverUrl:      "",
 	}
+	user, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, int64(userid))
+	if err != nil {
+		return nil, err
+	}
+	err1 := l.svcCtx.UserModel.Update(l.ctx, &model.Users{
+		UserId:    user.UserId,
+		WorkCount: sql.NullInt64{Valid: true, Int64: int64(user.WorkCount.Int64 + 1)},
+	})
+	if err1 != nil {
+		return nil, err1
+	}
 	_, err = l.svcCtx.VideoModel.Insert(l.ctx, &video_t)
 	if err != nil {
 		upload.DeleteVideo(videoID)
