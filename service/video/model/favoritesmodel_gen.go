@@ -31,6 +31,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*Favorites, error)
 		Update(ctx context.Context, data *Favorites) error
 		Delete(ctx context.Context, id int64) error
+		JudgeFavorite(ctx context.Context, userid int64, videoid int64) (bool, error)
 	}
 
 	defaultFavoritesModel struct {
@@ -53,6 +54,19 @@ func newFavoritesModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultFavoritesMo
 	}
 }
 
+func (m *defaultFavoritesModel) JudgeFavorite(ctx context.Context, userid int64, videoid int64) (bool, error) {
+	var resp Favorites
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `video_id` = ?", favoritesRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, userid, videoid)
+	switch err {
+	case nil:
+		return true, nil
+	case sqlc.ErrNotFound:
+		return false, nil
+	default:
+		return false, err
+	}
+}
 func (m *defaultFavoritesModel) Delete(ctx context.Context, id int64) error {
 	favoritesIdKey := fmt.Sprintf("%s%v", cacheFavoritesIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

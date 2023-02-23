@@ -33,7 +33,7 @@ func (l *FeedLogic) Feed(req *types.Douyin_feed_request) (resp *types.Douyin_fee
 	if err != nil {
 		return nil, err
 	}
-
+	//logx.Info("Get Request~")
 	var VideoList []types.Douyin_video = make([]types.Douyin_video, 0)
 	for _, item := range res.VideoList {
 		VideoList = append(VideoList, types.Douyin_video{

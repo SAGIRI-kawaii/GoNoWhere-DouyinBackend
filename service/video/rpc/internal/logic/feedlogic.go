@@ -54,6 +54,10 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 		if err != nil {
 			return nil, err
 		}
+		favor_flag, err := l.svcCtx.FavorModel.JudgeFavorite(l.ctx, userid, v.VideoId)
+		if err != nil {
+			return nil, err
+		}
 		//logx.Info("videoID:" + strconv.FormatInt(v.VideoId, 10) + "time:" + strconv.FormatInt(v.UpdateTime.Unix(), 10))
 		video_t := &video.Video{
 			Id: v.VideoId,
@@ -74,7 +78,7 @@ func (l *FeedLogic) Feed(in *video.DouyinFeedRequest) (*video.DouyinFeedResponse
 			CoverUrl:      v.CoverUrl,
 			FavoriteCount: v.FavoriteCount,
 			CommentCount:  v.CommentCount,
-			IsFavorite:    false,
+			IsFavorite:    favor_flag,
 			Title:         v.Title,
 		}
 		vs = append(vs, video_t)
