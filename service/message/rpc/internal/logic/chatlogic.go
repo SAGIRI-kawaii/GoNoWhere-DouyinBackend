@@ -7,6 +7,7 @@ import (
 	"mini-douyin/common/jwtx"
 	"mini-douyin/service/message/rpc/internal/svc"
 	"mini-douyin/service/message/rpc/message"
+	"strconv"
 	"time"
 )
 
@@ -39,13 +40,14 @@ func (l *ChatLogic) Chat(in *message.DouyinMessageChatRequest) (*message.DouyinM
 	msg := "sucess"
 	var ansMsg []*message.Message
 	for i := 0; i < len(*messages); i++ {
-		time := (*messages)[i].CreateAt.Time.String()
+		time1 := (*messages)[i].CreateAt.Time.String()
+		time2, _ := strconv.ParseInt(time1, 10, 64)
 		ansMsg = append(ansMsg, &message.Message{
 			Id:         (*messages)[i].Id,
 			ToUserId:   (*messages)[i].UserId.Int64,
 			FromUserId: (*messages)[i].ToUserId.Int64,
 			Content:    (*messages)[i].Content.String,
-			CreateTime: &time,
+			CreateTime: &time2,
 		})
 	}
 	return &message.DouyinMessageChatResponse{

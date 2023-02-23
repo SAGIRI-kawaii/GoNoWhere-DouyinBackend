@@ -421,11 +421,11 @@ type Message struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id         int64   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                        // 消息id
-	ToUserId   int64   `protobuf:"varint,2,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id,omitempty"`          // 该消息接收者的id
-	FromUserId int64   `protobuf:"varint,3,opt,name=from_user_id,json=fromUserId,proto3" json:"from_user_id,omitempty"`    // 该消息发送者的id
-	Content    string  `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`                               // 消息内容
-	CreateTime *string `protobuf:"bytes,5,opt,name=create_time,json=createTime,proto3,oneof" json:"create_time,omitempty"` // 消息创建时间
+	Id         int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                         // 消息id
+	ToUserId   int64  `protobuf:"varint,2,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id,omitempty"`           // 该消息接收者的id
+	FromUserId int64  `protobuf:"varint,3,opt,name=from_user_id,json=fromUserId,proto3" json:"from_user_id,omitempty"`     // 该消息发送者的id
+	Content    string `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`                                // 消息内容
+	CreateTime *int64 `protobuf:"varint,5,opt,name=create_time,json=createTime,proto3,oneof" json:"create_time,omitempty"` // 消息创建时间
 }
 
 func (x *Message) Reset() {
@@ -488,11 +488,11 @@ func (x *Message) GetContent() string {
 	return ""
 }
 
-func (x *Message) GetCreateTime() string {
+func (x *Message) GetCreateTime() int64 {
 	if x != nil && x.CreateTime != nil {
 		return *x.CreateTime
 	}
-	return ""
+	return 0
 }
 
 type DouyinRelationActionRequest struct {
@@ -724,7 +724,7 @@ var file_message_proto_rawDesc = []byte{
 	0x49, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x04, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x24, 0x0a, 0x0b,
 	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28,
-	0x09, 0x48, 0x00, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x88,
+	0x03, 0x48, 0x00, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x88,
 	0x01, 0x01, 0x42, 0x0e, 0x0a, 0x0c, 0x5f, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x5f, 0x74, 0x69,
 	0x6d, 0x65, 0x22, 0x8f, 0x01, 0x0a, 0x1e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x72, 0x65,
 	0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x65,

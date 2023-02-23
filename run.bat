@@ -1,15 +1,13 @@
 start cmd /k  "etcd"
 
-start cmd /k  "timeout -nobreak 3 && c: && cd .\service\user\rpc && go run user.go"
+start cmd /k  "timeout -nobreak 5 && c: && go run .\service\user\rpc\user.go"
 
-start cmd /k  "timeout -nobreak 7 && c: && cd .\service\video\rpc && go run video.go"
+start cmd /k  "timeout -nobreak 10 && c: && go run .\service\video\rpc\video.go"
 
-start cmd /k  "timeout -nobreak 10 && c: && cd .\service\interact\rpc && go run interact.go"
+start cmd /k  "timeout -nobreak 15 && c: && go run .\service\interact\rpc\interact.go"
 
-start cmd /k  "timeout -nobreak 13 && c: && cd .\service\social\rpc && go run follow.go"
+start cmd /k  "timeout -nobreak 20 && c: && go run .\service\social\rpc\follow.go"
 
-start cmd /k  "timeout -nobreak 15 && c: && cd .\service\message\rpc && go run message.go"
+start cmd /k  "timeout -nobreak 25 && c: && go run .\service\message\rpc\message.go"
 
-start cmd /k  "timeout -nobreak 18 && c: && cd .\service\api && go run api.go"
-
-
+start cmd /k  "timeout -nobreak 30 && c: && go run .\service\api\api.go"

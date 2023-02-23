@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/randolphcyg/gozeropprof"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -32,4 +33,5 @@ func main() {
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
+	gozeropprof.StartAgent("0.0.0.0", 6060)
 }
