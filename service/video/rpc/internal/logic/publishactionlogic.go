@@ -56,7 +56,7 @@ func (l *PublishActionLogic) PublishAction(in *video.DouyinPublishActionRequest)
 		return nil, err
 	}
 	err1 := l.svcCtx.UserModel.Update(l.ctx, &model.Users{
-		UserId:    user.UserId,
+		Id:        user.Id,
 		WorkCount: sql.NullInt64{Valid: true, Int64: int64(user.WorkCount.Int64 + 1)},
 	})
 	if err1 != nil {
